@@ -120,7 +120,9 @@
 	}
 
 	function handle_authentication() {
-		session_set_cookie_params(3 * 3600, '/~jille/kn-album/');
+		global $domain, $absolute_url_path;
+
+		session_set_cookie_params(3 * 3600, $absolute_url_path);
 		session_name('sessid-knalbum');
 		session_start();
 		if($_SERVER['HTTP_HOST'] != $domain) {
