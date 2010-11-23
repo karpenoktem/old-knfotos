@@ -200,6 +200,36 @@
 			case 'Ellke':
 				$zpTagToUser[$row['id']] = 'elleke';
 				break;
+			case 'Feli':
+				$zpTagToUser[$row['id']] = 'felix';
+				break;
+			case 'Kris':
+				$zpTagToUser[$row['id']] = 'chris';
+				break;
+			case 'Myrhte':
+				$zpTagToUser[$row['id']] = 'myrthe';
+				break;
+			case 'Bente. Kristan':
+				$zpTagToUser[$row['id']] = 'bente';
+				break;
+			case 'Michiel. Bas':
+				$zpTagToUser[$row['id']] = 'michiel,bas';
+				break;
+			case 'Robn':
+				$zpTagToUser[$row['id']] = 'robin';
+				break;
+			case 'Bente Chaim':
+				$zpTagToUser[$row['id']] = 'bente,chaim';
+				break;
+			case 'Yurre. Noelle':
+				$zpTagToUser[$row['id']] = 'yurre,noelle';
+				break;
+			case 'Chaim. Remco':
+				$zpTagToUser[$row['id']] = 'chaim,remco';
+				break;
+			case 'Machtold':
+				$zpTagToUser[$row['id']] = 'machteld';
+				break;
 			default:
 				if(in_array(strtolower($row['name']), $knUsers)) {
 					$zpTagToUser[$row['id']] = strtolower($row['name']);
