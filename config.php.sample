@@ -1,0 +1,15 @@
+<?php
+	$fotodir = "/path/to/fotos/";
+	$cachedir = "/path/to/cache/";
+
+	$thumbs_per_row = 4;
+	$rows_of_thumbs = 2;
+
+	$foto_slider = true;
+	$foto_slider_preload = true;
+	$foto_slider_timeout = 5;
+
+	$imagick = '/usr/local/bin/convert'; // or false to use GD
+	$thumbnail_size = '100x';
+	$large_size = '1024x';
+?>
