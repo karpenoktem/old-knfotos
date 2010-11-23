@@ -123,31 +123,31 @@
 		session_set_cookie_params(3 * 3600, '/~jille/kn-album/');
 		session_name('sessid-knalbum');
 		session_start();
-		if($_SERVER['HTTP_HOST'] != 'www.karpenoktem.nl') {
-			header('Location: http://www.karpenoktem.nl'. $_SERVER['REQUEST_URI']);
+		if($_SERVER['HTTP_HOST'] != $domain) {
+			header('Location: http://'. $domain . $_SERVER['REQUEST_URI']);
 			exit;
 		}
 		if(isset($_GET['user'], $_GET['token'])) {
-			$params = array('user' => $_GET['user'], 'validate' => $_GET['token'], 'url' => 'http://karpenoktem.nl/~jille/kn-album/');
+			$params = array('user' => $_GET['user'], 'validate' => $_GET['token'], 'url' => 'http://'. $domain . $absolute_url_path);
 			$ch = curl_init('http://www.karpenoktem.nl/accounts/rauth/?'. http_build_query($params));
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			$res = curl_exec($ch);
 			curl_close($ch);
 			if($res != 'OK') {
-				die('Login mislukt. <a href="/~jille/kn-album/">Probeer het nogmaals.</a>');
+				die('Login mislukt. <a href="'. $absolute_url_path .'">Probeer het nogmaals.</a>');
 			}
 			$_SESSION['user'] = $_GET['user'];
 			if(isset($_SESSION['entry_url'])) {
 				header('Location: '. $_SESSION['entry_url']);
 				unset($_SESSION['entry_url']);
 			} else {
-				header('Location: /~jille/kn-album/');
+				header('Location: '. $absolute_url_path);
 			}
 			exit;
 		}
 		if(!isset($_SESSION['user'])) {
 			$_SESSION['entry_url'] = $_SERVER['REQUEST_URI'];
-			header('Location: http://www.karpenoktem.nl/accounts/rauth/?url=http://karpenoktem.nl/~jille/kn-album/');
+			header('Location: http://www.karpenoktem.nl/accounts/rauth/?url=http://'. $domain . $absolute_url_path);
 			exit;
 		}
 

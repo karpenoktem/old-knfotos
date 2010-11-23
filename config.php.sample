@@ -2,6 +2,9 @@
 	$fotodir = "/path/to/fotos/";
 	$cachedir = "/path/to/cache/";
 
+	$domain = 'karpenoktem.nl';
+	$absolute_url_path = '/fotos2/';
+
 	$thumbs_per_row = 4;
 	$rows_of_thumbs = 2;
 
