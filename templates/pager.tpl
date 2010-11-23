@@ -10,7 +10,7 @@
 			<a href="<?= $url ?>&page=<?= $page -1 ?>">Vorige</a>
 <?php } ?>
 		</td>
-<?php for($p = 0; $last > $p; $p++) { ?>
+<?php for($p = 0; $last >= $p; $p++) { ?>
 <?php if($p == $page) { ?>
 		<td class="current"><?= $p+1 ?></td>
 <?php } else { ?>
