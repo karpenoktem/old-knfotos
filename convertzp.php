@@ -2,6 +2,8 @@
 	$cli_mode = true;
 	require('header.php');
 
+	$ambigueUsers = array('mike', 'michiel', 'anne', 'bas', 'bart', 'bram', 'iris', 'jesper', 'judith', 'maaike', 'niek', 'paul');
+
 	$zpAlbums = array();
 	$res = mysql_query('SELECT id, parentid, folder, title, `show` FROM zp_albums ORDER BY id');
 	while($row = mysql_fetch_assoc($res)) {
@@ -79,7 +81,7 @@
 			case '1: Normal (0 deg)':
 			default:
 				$row['rotation'] = 0;
-				continue;
+				continue 2;
 				break;
 		}
 
@@ -90,7 +92,6 @@
 	foreach($rotations as $rotation => $ids) {
 		echo "Rotation ". $rotation .": ". count($ids) ." images\n";
 		mysql_query("UPDATE fa_photos SET cached=IF(rotation = ". intval($rotation) .", cached, CONCAT(cached, ',invalidated')), rotation=". intval($rotation) ." WHERE id IN(". implode(',', $ids) .")");
-		var_dump(mysql_error());
 	}
 
 	$knUsers = array();
@@ -230,6 +231,30 @@
 			case 'Machtold':
 				$zpTagToUser[$row['id']] = 'machteld';
 				break;
+			case 'Nickie':
+				$zpTagToUser[$row['id']] = 'nikie';
+				break;
+			case 'Bob/Andre':
+				$zpTagToUser[$row['id']] = 'andre';
+				break;
+			case 'Niek. Iris':
+				$zpTagToUser[$row['id']] = 'iris,niek';
+				break;
+			case 'Irs':
+				$zpTagToUser[$row['id']] = 'iris';
+				break;
+			case 'Miciel':
+				$zpTagToUser[$row['id']] = 'michiel';
+				break;
+			case 'Michiel. Annette':
+				$zpTagToUser[$row['id']] = 'michiel,annette';
+				break;
+			case 'Daniëlle':
+				$zpTagToUser[$row['id']] = 'danielle';
+				break;
+			case 'Daan Paul':
+				$zpTagToUser[$row['id']] = 'daan,paul';
+				break;
 			default:
 				if(in_array(strtolower($row['name']), $knUsers)) {
 					$zpTagToUser[$row['id']] = strtolower($row['name']);
@@ -247,6 +272,7 @@
 	}
 
 	$visibilities = array();
+	$shouldCheckTags = array();
 	$res = mysql_query("SELECT tagid, objectid FROM zp_obj_to_tag WHERE type='images'");
 	mysql_query('LOCK TABLE fa_tags WRITE');
 	while($row = mysql_fetch_assoc($res)) {
@@ -254,14 +280,23 @@
 			continue;
 		}
 		$pid = $zpPhotos[$row['objectid']]['photo_id'];
+		$shouldCheck = false;
 		if(isset($zpTagToUser[$row['tagid']])) {
 			foreach(explode(',', $zpTagToUser[$row['tagid']]) as $tag) {
 				if($tag == '*leden') {
 					$visibilities['leden'][] = $pid;
+				} elseif($tag == '*check') {
+					$shouldCheck = true;
 				} else {
+					if(in_array($tag, $ambigueUsers)) {
+						$shouldCheck = true;
+					}
 					mysql_query("REPLACE INTO fa_tags (photo_id, username) VALUES (". $pid .", '". addslashes($tag) ."')");
 				}
 			}
+		}
+		if($shouldCheck) {
+			$shouldCheckTags[] = $pid;
 		}
 	}
 	mysql_query('UNLOCK TABLES');
@@ -269,6 +304,6 @@
 	foreach($visibilities as $visibility => $ids) {
 		echo "Visibility ". $visibility .": ". count($ids) ." images\n";
 		mysql_query("UPDATE fa_photos SET visibility=". intval($visibility) ." WHERE id IN(". implode(',', $ids) .")");
-		var_dump(mysql_error());
 	}
+	mysql_query("UPDATE fa_photos SET check_tags=1 WHERE id IN(". implode(',', $shouldCheckTags) .")");
 ?>
