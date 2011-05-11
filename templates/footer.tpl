@@ -13,7 +13,7 @@
 <?php show_template('actions.tpl'); ?>
 			</div>
 			<div id="footer">
-				&copy;2009-2010, Jille Timmermans; Karpe Noktem
+				&copy;2009-2011, Jille Timmermans & Bart Schuurmans; Karpe Noktem
 			</div>
 		</div>
 	</body>
