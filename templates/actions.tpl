@@ -20,8 +20,8 @@
 					</form>
 				</table>
 			</fieldset>
-<?PHP if($mode == 'view') { ?>
 <?PHP if(isAdmin()) { ?>
+<?PHP if($mode == 'view') { ?>
 			<form>
 				<fieldset>
 					<legend>Tags</legend>
@@ -183,7 +183,6 @@
 				<input type="button" value="Save" onClick="submitMetaData(false);">
 				<input type="button" value="Save and continue" onClick="submitMetaData(true);">
 			</form>
-<?PHP } ?>
 <?PHP } elseif($mode == 'index') { ?>
 <?PHP if($visibility) { ?>
 			<fieldset id="settings">
@@ -252,5 +251,6 @@
 					</table>
 				</form>
 			</fieldset>
+<?PHP } ?>
 <?PHP } ?>
 <?PHP } ?>
