@@ -139,6 +139,13 @@
 				die('Login mislukt. <a href="'. $absolute_url_path .'">Probeer het nogmaals.</a>');
 			}
 			$_SESSION['user'] = $_GET['user'];
+
+			$res = mysql_query("SELECT auth_group.name FROM kn_site.auth_user, kn_site.auth_user_groups, kn_site.auth_group WHERE auth_user.id = auth_user_groups.user_id AND auth_user_groups.group_id = auth_group.id AND auth_user.is_active AND auth_user.username='". addslashes($_SESSION['user']) ."' AND auth_group.name IN('webcie', 'fotocie', 'fototaggers')");
+			$_SESSION['groups'] = array();
+			while($row = mysql_fetch_assoc($res)) {
+				$_SESSION['groups'][] = $row['name'];
+			}
+
 			if(isset($_SESSION['entry_url'])) {
 				header('Location: '. $_SESSION['entry_url']);
 				unset($_SESSION['entry_url']);
@@ -151,12 +158,6 @@
 			$_SESSION['entry_url'] = $_SERVER['REQUEST_URI'];
 			header('Location: http://www.karpenoktem.nl/accounts/rauth/?url=http://'. $domain . $absolute_url_path);
 			exit;
-		}
-
-		$res = mysql_query("SELECT auth_group.name FROM kn_site.auth_user, kn_site.auth_user_groups, kn_site.auth_group WHERE auth_user.id = auth_user_groups.user_id AND auth_user_groups.group_id = auth_group.id AND auth_user.is_active AND auth_user.username='". addslashes($_SESSION['user']) ."' AND auth_group.name IN('webcie', 'fotocie', 'fototaggers')");
-		$_SESSION['groups'] = array();
-		while($row = mysql_fetch_assoc($res)) {
-			$_SESSION['groups'][] = $row['name'];
 		}
 	}
 
