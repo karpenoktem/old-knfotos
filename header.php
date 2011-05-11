@@ -245,7 +245,7 @@
 				return false;
 			}
 		}
-		mysql_query("UPDATE fa_photos SET visibility='". $visibility ."', cached=IF(rotation = ". intval($rotation) .", cached, CONCAT(cached, ',invalidated')), rotation=". intval($rotation) ." WHERE id=". $id);
+		mysql_query("UPDATE fa_photos SET visibility='". $visibility ."', cached=IF(rotation = ". intval($rotation) .", cached, CONCAT(cached, ',invalidated')), rotation=". intval($rotation) .", check_tags=0 WHERE id=". $id);
 		mysql_query("DELETE FROM fa_tags WHERE photo_id=". $id);
 
 		if($tags) {
