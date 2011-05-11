@@ -43,8 +43,6 @@
 	function scan_gallery($path) {
 		global $fotodir, $albums, $photos, $extensions;
 
-		echo str_repeat(79, ' ') . chr(13) . $path . chr(13);
-
 		foreach(scandir($fotodir . $path) as $f) {
 			if($f[0] == '.') {
 				continue;
