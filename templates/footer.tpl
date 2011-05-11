@@ -1,6 +1,6 @@
 				</div>
 				<ul id="menu">
-					<li><a href="http://www.karpenoktem.nl/">KarpeNoktem.nl</a></li>
+					<li><a href="http://www.karpenoktem.nl/">karpenoktem.nl</a></li>
 <?PHP if(isset($parentalbum) || $mode == 'view') { ?>
 					<li><a href="./">Fotoalbum</a></li>
 <?PHP } ?>
