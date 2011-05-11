@@ -50,8 +50,15 @@
 		}
 
 		handle_authentication();
-		if(!in_array('webcie', $_SESSION['groups'])) {
-			die("Dit is voorlopig alleen beschikbaar voor WebCie leden.");
+
+		if(!isLid()) {
+			$login_url = $_SERVER['REQUEST_URI'];
+			if(strpos($login_url, '?') !== false) {
+				$login_url .= '&login';
+			} else {
+				$login_url .= '?login';
+			}
+			template_assign('login_url');
 		}
 
 		template_assign('thumbs_per_row');
@@ -154,15 +161,25 @@
 			}
 			exit;
 		}
-		if(!isset($_SESSION['user'])) {
-			$_SESSION['entry_url'] = $_SERVER['REQUEST_URI'];
+		if(isset($_GET['login']) && !isset($_SESSION['user'])) {
+			$params = $_GET;
+			unset($params['login']);
+			$_SESSION['entry_url'] = $_SERVER['SCRIPT_NAME'] .'?'. http_build_query($params);
 			header('Location: http://www.karpenoktem.nl/accounts/rauth/?url=http://'. $domain . $absolute_url_path);
+			exit;
+		} elseif(isset($_GET['logout'])) {
+			unset($_SESSION['user'], $_SESSION['groups']);
+			header('Location: '. $_SERVER['REQUEST_URI']);
 			exit;
 		}
 	}
 
 	function isAdmin() {
-		return count($_SESSION['groups']) > 0;
+		return (isset($_SESSION['groups']) && count($_SESSION['groups']) > 0);
+	}
+
+	function isLid() {
+		return isset($_SESSION['user']);
 	}
 
 	function getVisibleVisibilities() {

@@ -20,7 +20,9 @@
 					</form>
 				</table>
 			</fieldset>
-<?PHP if(isAdmin()) { ?>
+<?PHP if(!isLid()) { ?>
+			<a href="<?= $login_url ?>">Inloggen</a>
+<?PHP } elseif(isAdmin()) { ?>
 <?PHP if($mode == 'view') { ?>
 			<form>
 				<fieldset>
