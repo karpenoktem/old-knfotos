@@ -10,7 +10,7 @@
 
 	$res = mysql_query('SELECT name, path FROM fa_albums');
 	while($row = mysql_fetch_assoc($res)) {
-		if(!in_array($row['name'], $albums[$row['path']])) {
+		if(!isset($albums[$row['path']]) || !in_array($row['name'], $albums[$row['path']])) {
 			mysql_query("UPDATE fa_albums SET visibility='lost' WHERE name='". addslashes($row['name']) ."' AND path='". addslashes($row['path']) ."'");
 		} else {
 			unset($albums[$row['path']][array_search($row['name'], $albums[$row['path']])]);
