@@ -27,7 +27,7 @@
 
 	$res = mysql_query('SELECT name, path FROM fa_photos');
 	while($row = mysql_fetch_assoc($res)) {
-		if(!in_array($row['name'], $photos[$row['path']])) {
+		if(!isset($photos[$row['path']]) || !in_array($row['name'], $photos[$row['path']])) {
 			mysql_query("UPDATE fa_photos SET visibility='lost' WHERE name='". addslashes($row['name']) ."' AND path='". addslashes($row['path']) ."'");
 		} else {
 			unset($photos[$row['path']][array_search($row['name'], $photos[$row['path']])]);
