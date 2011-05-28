@@ -5,7 +5,7 @@
 $cli_mode = true;
 require('header.php');
 
-$res = mysql_query("SELECT * FROM fa_photos WHERE visibility <> 'lost'");
+$res = sql_query("SELECT * FROM fa_photos WHERE visibility <> 'lost'");
 $n = 0;
 while($row = mysql_fetch_assoc($res)) {
         $n++;

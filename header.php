@@ -153,7 +153,7 @@
 			}
 			$_SESSION['user'] = $_GET['user'];
 
-			$res = mysql_query("SELECT auth_group.name FROM kn_site.auth_user, kn_site.auth_user_groups, kn_site.auth_group WHERE auth_user.id = auth_user_groups.user_id AND auth_user_groups.group_id = auth_group.id AND auth_user.is_active AND auth_user.username='". addslashes($_SESSION['user']) ."' AND auth_group.name IN('webcie', 'fotocie', 'fototaggers')");
+			$res = ql_query("SELECT auth_group.name FROM kn_site.auth_user, kn_site.auth_user_groups, kn_site.auth_group WHERE auth_user.id = auth_user_groups.user_id AND auth_user_groups.group_id = auth_group.id AND auth_user.is_active AND auth_user.username=%s AND auth_group.name IN('webcie', 'fotocie', 'fototaggers')", $_SESSION['user']);
 			$_SESSION['groups'] = array();
 			while($row = mysql_fetch_assoc($res)) {
 				$_SESSION['groups'][] = $row['name'];
@@ -228,7 +228,7 @@
 		}
 
 		$albums = array();
-		$res = mysql_query("SELECT * FROM fa_albums WHERE CONCAT(path, name) IN ('". implode("','", $parts) ."') ORDER BY path");
+		$res = sql_query("SELECT * FROM fa_albums WHERE CONCAT(path, name) IN (%S) ORDER BY path", $parts);
 		while($row = mysql_fetch_assoc($res)) {
 			$albums[] = $row;
 		}
@@ -245,14 +245,14 @@
 		}
 		if($tags) {
 			$tags = explode(',', $tags);
-			$res = mysql_query("SELECT COUNT(*) FROM kn_site.auth_user WHERE username IN ('". implode("','", $tags) ."')");
+			$res = sql_query("SELECT COUNT(*) FROM kn_site.auth_user WHERE username IN (%S)"), $tags;
 			$row = mysql_fetch_row($res);
 			if(count($tags) != $row[0]) {
 				return false;
 			}
 		}
-		mysql_query("UPDATE fa_photos SET visibility='". $visibility ."', cached=IF(rotation = ". intval($rotation) .", cached, CONCAT(cached, ',invalidated')), rotation=". intval($rotation) .", check_tags=0 WHERE id=". $id);
-		mysql_query("DELETE FROM fa_tags WHERE photo_id=". $id);
+		sql_query("UPDATE fa_photos SET visibility=%s, cached=IF(rotation = %i, cached, CONCAT(cached, ',invalidated')), rotation=%i, check_tags=0 WHERE id=". $id, $visibility, $rotation, $rotation);
+		sql_query("DELETE FROM fa_tags WHERE photo_id=%i", $id);
 
 		if($tags) {
 			$sql = "INSERT INTO fa_tags (photo_id, username) VALUES ";
@@ -269,7 +269,7 @@
 		if(!in_array($visibility, array('world', 'leden', 'hidden', 'deleted'))) {
 			return false;
 		}
-		mysql_query("UPDATE fa_albums SET visibility='". $visibility ."', humanname='". addslashes($humanname) ."' WHERE id=". $id);
+		sql_query("UPDATE fa_albums SET visibility='". $visibility ."', humanname=%s WHERE id=%i", $humanname, $id);
 		return true;
 	}
 
