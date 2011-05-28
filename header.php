@@ -245,7 +245,7 @@
 		}
 		if($tags) {
 			$tags = explode(',', $tags);
-			$res = sql_query("SELECT COUNT(*) FROM kn_site.auth_user WHERE username IN (%S)"), $tags);
+			$res = sql_query("SELECT COUNT(*) FROM kn_site.auth_user WHERE username IN (%S)", $tags);
 			$row = mysql_fetch_row($res);
 			if(count($tags) != $row[0]) {
 				return false;
