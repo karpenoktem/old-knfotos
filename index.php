@@ -43,7 +43,7 @@
 	if(!empty($_GET['search_album'])) {
 		// Zoeken op naam album
 		$keyword = trim($_GET['search_album']);
-                $res = mysql_query("SELECT SQL_CALC_FOUND_ROWS 'album'
+                $res = sql_query("SELECT SQL_CALC_FOUND_ROWS 'album'
                                 AS type, fa_albums.*
 			FROM fa_albums
 			WHERE path LIKE %s
@@ -59,7 +59,7 @@
 	} elseif(!empty($_GET['search_tag'])) {
 		// Zoeken op tags
 		$keyword = trim($_GET['search_tag']);
-		$res = mysql_query("SELECT SQL_CALC_FOUND_ROWS 'photo' AS type, fa_photos.*
+		$res = sql_query("SELECT SQL_CALC_FOUND_ROWS 'photo' AS type, fa_photos.*
 			FROM fa_photos, fa_tags
 			WHERE fa_tags.username = %s
 				AND fa_tags.photo_id = fa_photos.id
