@@ -3,6 +3,12 @@
 	ini_set('display_errors', 1);
 	ini_set('log_errors', 0);
 
+	define('UNIT_PHOTO', 1);
+	define('UNIT_ALBUM', 2);
+	define('UNIT_BOTH', UNIT_PHOTO | UNIT_ALBUM);
+
+	require('sql.php');
+
 	if(!isset($cli_mode)) {
 		$cli_mode = false;
 	}
@@ -265,5 +271,27 @@
 		}
 		mysql_query("UPDATE fa_albums SET visibility='". $visibility ."', humanname='". addslashes($humanname) ."' WHERE id=". $id);
 		return true;
+	}
+
+	function getUnitByFullPath($fullpath, $flags = UNIT_BOTH) {
+		$p = strrpos($fullpath, '/');
+		$name = substr($fullpath, $p);
+		$path = substr($fullpath, 0, $p);
+
+		if($flags & UNIT_PHOTO) {
+			$res = sql_query("SELECT * FROM fa_photos WHERE path = %s AND name = %s", $path, $name);
+			if($photo = mysql_fetch_assoc($res)) {
+				$photo['type'] = 'photo';
+				return $photo;
+			}
+		}
+		if($flags & UNIT_ALBUM) {
+			$res = sql_query("SELECT * FROM fa_albums WHERE path = %s AND name = %s", $path, $name);
+			if($album = mysql_fetch_assoc($res)) {
+				$album['type'] = 'album';
+				return $album;
+			}
+		}
+		return false;
 	}
 ?>

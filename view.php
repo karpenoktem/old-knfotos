@@ -13,8 +13,8 @@
 		header('Location: view.php?foto='. urlencode($_GET['foto']));
 		exit;
 	}
-	$res = mysql_query("SELECT * FROM fa_photos WHERE CONCAT(path, name)='". addslashes($_GET['foto']) ."'");
-	if(!$photo = mysql_fetch_assoc($res)) { 
+	$photo = getUnitByFullPath($_GET['foto'], UNIT_PHOTO);
+	if(!$photo) {
 		header('HTTP/1.1 404 Not Found');
 		die('Photo not found');
 	}
@@ -33,12 +33,12 @@
 	$visibility = $photo['visibility'];
 	$rotation = $photo['rotation'];
 	$users = array();
-	$res = mysql_query("SELECT username FROM kn_site.auth_user ORDER BY username");
+	$res = sql_query("SELECT username FROM kn_site.auth_user ORDER BY username");
 	while($row = mysql_fetch_assoc($res)) {
 		$users[$row['username']] = $row['username'];
 	}
 	$taggedUsers = array();
-	$res = mysql_query("SELECT username FROM fa_tags WHERE photo_id=". $photo['id']);
+	$res = sql_query("SELECT username FROM fa_tags WHERE photo_id=%i", $photo['id']);
 	while($row = mysql_fetch_assoc($res)) {
 		$taggedUsers[$row['username']] = $row['username'];
 	}
@@ -47,7 +47,8 @@
 	$prev = false;
 	$first = false;
 
-	$res = mysql_query("SELECT name FROM fa_units WHERE path='". addslashes($album) ."' AND visibility IN ('". implode("','", getVisibleVisibilities()) ."') ORDER BY name");
+	$res = mysql_query("SELECT name FROM fa_albums WHERE path='". addslashes($album) ."' AND visibility IN ('". implode("','", getVisibleVisibilities()) ."') ORDER BY name");
+	$res = sql_query("SELECT name FROM fa_albums WHERE path=%s AND visibility IN (%S) ORDER BY name", $album, getVisibleVisibilities());
 	while($row = mysql_fetch_assoc($res)) {
 		if(!$first) {
 			$first = $album . $photo['name'];
