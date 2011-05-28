@@ -43,26 +43,32 @@
 	if(!empty($_GET['search_album'])) {
 		// Zoeken op naam album
 		$keyword = trim($_GET['search_album']);
-		$res = mysql_query("SELECT SQL_CALC_FOUND_ROWS 'album' AS type, fa_albums.*
+                $res = mysql_query("SELECT SQL_CALC_FOUND_ROWS 'album'
+                                AS type, fa_albums.*
 			FROM fa_albums
-			WHERE path LIKE '". addslashes($album) ."%'
-				AND visibility IN ('". implode("','", getVisibleVisibilities()) ."')
-				AND (name LIKE '%". addslashes($keyword) ."%'
-					OR humanname LIKE '%". addslashes($keyword) ."')
-			ORDER BY ". $order ."
-			LIMIT ". $offset .", ". $limit);
+			WHERE path LIKE %s
+				AND visibility IN (%S)
+				AND (name LIKE %s
+					OR humanname LIKE %s)
+			ORDER BY $order
+                        LIMIT %i, %i",
+                                $album.'%', getVisibleVisibilities(),
+                                '%'.$keyword.'%', '%'.$keyword.'%',
+                                $offset, $limit);
 		$extra_params .= '&search_album='. $keyword;
 	} elseif(!empty($_GET['search_tag'])) {
 		// Zoeken op tags
 		$keyword = trim($_GET['search_tag']);
 		$res = mysql_query("SELECT SQL_CALC_FOUND_ROWS 'photo' AS type, fa_photos.*
 			FROM fa_photos, fa_tags
-			WHERE fa_tags.username = '". addslashes($keyword) ."'
+			WHERE fa_tags.username = %s
 				AND fa_tags.photo_id = fa_photos.id
-				AND fa_photos.path LIKE '". addslashes($album) ."%'
-				AND fa_photos.visibility IN ('". implode("','", getVisibleVisibilities()) ."')
+				AND fa_photos.path LIKE %s
+				AND fa_photos.visibility IN (%S)
 			ORDER BY ". $order ."
-			LIMIT ". $offset .", ". $limit);
+                        LIMIT %i, %i",
+                        $keyword, $album.'%', getVisibleVisibilities(),
+                        $offset, $limits);
 		$extra_params .= '&search_tag='. $keyword;
 	} else {
 		$keyword = '';

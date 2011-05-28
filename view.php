@@ -47,7 +47,6 @@
 	$prev = false;
 	$first = false;
 
-	$res = mysql_query("SELECT name FROM fa_albums WHERE path='". addslashes($album) ."' AND visibility IN ('". implode("','", getVisibleVisibilities()) ."') ORDER BY name");
 	$res = sql_query("SELECT name FROM fa_albums WHERE path=%s AND visibility IN (%S) ORDER BY name", $album, getVisibleVisibilities());
 	while($row = mysql_fetch_assoc($res)) {
 		if(!$first) {
