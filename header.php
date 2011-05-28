@@ -269,7 +269,7 @@
 		if(!in_array($visibility, array('world', 'leden', 'hidden', 'deleted'))) {
 			return false;
 		}
-		sql_query("UPDATE fa_albums SET visibility='". $visibility ."', humanname=%s WHERE id=%i", $humanname, $id);
+		sql_query("UPDATE fa_albums SET visibility=%s, humanname=%s WHERE id=%i", $visibility, $humanname, $id);
 		return true;
 	}
 
