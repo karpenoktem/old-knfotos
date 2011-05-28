@@ -34,9 +34,36 @@
 		}
 	}
 
+        // Insert the remaining images
 	foreach($photos as $path=>$dirs) {
 		foreach($dirs as $photo) {
-			mysql_query("INSERT INTO fa_photos (name, path) VALUES ('". addslashes($photo) ."', '". addslashes($path) ."')");
+                        // Extract EXIF data to determine rotation
+                        $exif = exif_read_data($fotodir.$path.$photo, 'IFD0');
+                        $raw_or = isset($exif['Orientation']) ?
+                                        $exif['Orientation'] : 0;
+                        if($raw_or == 1 or $raw_or == 0)
+                                $or = 0;
+                        elseif($raw_or == 3)
+                                $or = 180;
+                        elseif($raw_or == 6)
+                                $or = 90;
+                        elseif($raw_or == 8)
+                                $or = 270;
+                        else {
+                                echo "\n";
+                                echo "Unknown orientation: " . $raw_or . "\n";
+                                echo "  (".$path.$photo."\n";
+                                $or = 0;
+                        }
+
+                        // Insert image into database
+                        mysql_query("INSERT INTO fa_photos (
+                                        name,
+                                        path,
+                                        rotation)
+                                VALUES ('". addslashes($photo) ."',
+                                        '". addslashes($path) ."',
+                                        '". $or."')");
 		}
 	}
 
