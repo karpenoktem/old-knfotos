@@ -18,7 +18,7 @@
 	}
 
 	if($row['type'] == 'album') {
-		$res = mysql_query("SELECT * FROM fa_photos WHERE path LIKE '". addslashes($row['path'] . $row['name'] .'/') ."%' AND FIND_IN_SET('thumb', cached) LIMIT 1");
+		$res = sql_query("SELECT * FROM fa_photos WHERE path LIKE %s AND FIND_IN_SET('thumb', cached) ORDER BY RAND() LIMIT 1", $row['path'] . $row['name'] .'/%');
 		if(!$row = mysql_fetch_assoc($res)) { 
 			header('HTTP/1.1 404 Not Found');
 			showTextAsImage('No photo with thumbnail found for album');
