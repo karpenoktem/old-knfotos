@@ -153,7 +153,7 @@
 			}
 			$_SESSION['user'] = $_GET['user'];
 
-			$res = ql_query("SELECT auth_group.name FROM kn_site.auth_user, kn_site.auth_user_groups, kn_site.auth_group WHERE auth_user.id = auth_user_groups.user_id AND auth_user_groups.group_id = auth_group.id AND auth_user.is_active AND auth_user.username=%s AND auth_group.name IN('webcie', 'fotocie', 'fototaggers')", $_SESSION['user']);
+			$res = sql_query("SELECT auth_group.name FROM kn_site.auth_user, kn_site.auth_user_groups, kn_site.auth_group WHERE auth_user.id = auth_user_groups.user_id AND auth_user_groups.group_id = auth_group.id AND auth_user.is_active AND auth_user.username=%s AND auth_group.name IN('webcie', 'fotocie', 'fototaggers')", $_SESSION['user']);
 			$_SESSION['groups'] = array();
 			while($row = mysql_fetch_assoc($res)) {
 				$_SESSION['groups'][] = $row['name'];
