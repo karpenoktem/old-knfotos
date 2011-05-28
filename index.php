@@ -68,7 +68,7 @@
 			ORDER BY ". $order ."
                         LIMIT %i, %i",
                         $keyword, $album.'%', getVisibleVisibilities(),
-                        $offset, $limits);
+                        $offset, $limit);
 		$extra_params .= '&search_tag='. $keyword;
 	} else {
 		$keyword = '';
