@@ -5,8 +5,8 @@
 		header('HTTP/1.1 400 Bad Request');
 		showTextAsImage("Missing parameter");
 	}
-	$res = mysql_query("SELECT * FROM fa_photos WHERE CONCAT(path, name)='". addslashes($_GET['foto']) ."'");
-	if(!$row = mysql_fetch_assoc($res)) { 
+	$row = getUnitByFullPath($_GET['foto'], UNIT_PHOTO);
+	if(!$row) {
 		header('HTTP/1.1 404 Not Found');
 		showTextAsImage('Photo not found');
 	}

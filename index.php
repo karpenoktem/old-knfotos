@@ -20,8 +20,8 @@
 		$humanname = 'Fotoalbum';
 		$parentalbums = array();
 	} else {
-		$res = mysql_query("SELECT * FROM fa_albums WHERE CONCAT(path, name)='". addslashes(substr($album, 0, -1)) ."'");
-		if(!$row = mysql_fetch_assoc($res)) {
+		$row = getUnitByFullPath(substr($album, 0, -1));
+		if(!$row) {
 			header('HTTP/1.1 404 Not Found');
 			die('Album not found');
 		}

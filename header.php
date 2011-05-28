@@ -275,8 +275,13 @@
 
 	function getUnitByFullPath($fullpath, $flags = UNIT_BOTH) {
 		$p = strrpos($fullpath, '/');
-		$name = substr($fullpath, $p);
-		$path = substr($fullpath, 0, $p);
+		if($p === false) {
+			$name = $fullpath;
+			$path = '';
+		} else {
+			$name = substr($fullpath, $p+1);
+			$path = substr($fullpath, 0, $p+1);
+		}
 
 		if($flags & UNIT_PHOTO) {
 			$res = sql_query("SELECT * FROM fa_photos WHERE path = %s AND name = %s", $path, $name);
