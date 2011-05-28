@@ -67,6 +67,7 @@
 			template_assign('login_url');
 		}
 
+		template_assign('absolute_url_path');
 		template_assign('thumbs_per_row');
 		template_assign('rows_of_thumbs');
 
