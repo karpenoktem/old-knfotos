@@ -251,7 +251,7 @@
 				return false;
 			}
 		}
-		sql_query("UPDATE fa_photos SET visibility=%s, cached=IF(rotation = %i, cached, CONCAT(cached, ',invalidated')), rotation=%i, check_tags=0 WHERE id=". $id, $visibility, $rotation, $rotation);
+		sql_query("UPDATE fa_photos SET visibility=%s, cached=IF(rotation = %i, cached, CONCAT(cached, ',invalidated')), rotation=%i, check_tags=0 WHERE id=%i", $visibility, $rotation, $rotation, $id);
 		sql_query("DELETE FROM fa_tags WHERE photo_id=%i", $id);
 
 		if($tags) {
