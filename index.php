@@ -50,7 +50,7 @@
 				AND visibility IN (%S)
 				AND (name LIKE %s
 					OR humanname LIKE %s)
-			ORDER BY $order
+			ORDER BY ". $order ."
                         LIMIT %i, %i",
                                 $album.'%', getVisibleVisibilities(),
                                 '%'.$keyword.'%', '%'.$keyword.'%',
