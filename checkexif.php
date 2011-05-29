@@ -34,8 +34,8 @@
 							cached=CONCAT(cached, ',invalidated')
 					WHERE `id`=%i", $or, $row['id']);
 
-                        echo "\n".$path." ".$row['rotation']." -> ".$or."\n";
-                }
-        }
-        require('footer.php');
+			echo "\n".$path." ".$row['rotation']." -> ".$or."\n";
+		}
+	}
+	require('footer.php');
 ?>

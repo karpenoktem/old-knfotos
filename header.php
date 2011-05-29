@@ -1,5 +1,5 @@
 <?php
-        $log_queries__start_time = microtime(true);
+	$log_queries__start_time = microtime(true);
 	error_reporting(E_ALL);
 	ini_set('display_errors', 1);
 	ini_set('log_errors', 0);
@@ -22,9 +22,9 @@
 	if(!isset($fotodir, $cachedir, $domain, $absolute_url_path, $thumbs_per_row, $rows_of_thumbs, $imagick, $thumbnail_size, $foto_slider, $db_host, $db_user, $db_pass, $db_db)) {
 		die("Missing settings");
 	}
-        if($log_queries)
-                file_put_contents($log_queries, "HEADER "
-                        .$_SERVER['PHP_SELF'] ."\n", FILE_APPEND);
+	if($log_queries)
+		file_put_contents($log_queries, "HEADER "
+			.$_SERVER['PHP_SELF'] ."\n", FILE_APPEND);
 	if(!is_dir($fotodir)) {
 		die("foto dir not found");
 	}
@@ -260,20 +260,20 @@
 		sql_query("DELETE FROM fa_tags WHERE photo_id=%i", $id);
 
 		if($tags) {
-                        $args = array();
+			$args = array();
 			$sql = "INSERT INTO fa_tags (photo_id, username) VALUES ";
-                        $first = false;
+			$first = false;
 			foreach($tags as $tag) {
-                                if(!$first)
-                                        $first = true;
-                                else
-                                        $sql .= ',';
+				if(!$first)
+					$first = true;
+				else
+					$sql .= ',';
 				$sql .= "(%i, %s)";
-                                $args[]= $id;
-                                $args[]= $tag;
+				$args[]= $id;
+				$args[]= $tag;
 			}
-                        call_user_func_array(sql_query,
-                                array_merge(array($sql), $args));
+			call_user_func_array(sql_query,
+				array_merge(array($sql), $args));
 		}
 		return true;
 	}

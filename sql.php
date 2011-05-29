@@ -1,22 +1,22 @@
 <?php
 	function sql_query($query) {
-                global $log_queries;
+		global $log_queries;
 		$args = func_get_args();
 		array_shift($args);
 		$GLOBALS['_sql_query_params'] = $args;
 		$sql = preg_replace_callback('/%./', '_sql_query_callback', $query);
 		unset($GLOBALS['_sql_query_params']);
-                if($log_queries)
-                        $start_time = microtime(true);
+		if($log_queries)
+			$start_time = microtime(true);
 		if(!$res = mysql_query($sql)) {
 			throw new QueryFailedException($sql);
 		}
-                if($log_queries) {
-                        $end_time = microtime(true);
-                        $dur = $end_time - $start_time;
-                        file_put_contents($log_queries,
-                                $dur . ' ' . $sql . "\n", FILE_APPEND);
-                }
+		if($log_queries) {
+			$end_time = microtime(true);
+			$dur = $end_time - $start_time;
+			file_put_contents($log_queries,
+				$dur . ' ' . $sql . "\n", FILE_APPEND);
+		}
 		return $res;
 	}
 

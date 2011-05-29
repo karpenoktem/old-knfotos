@@ -33,5 +33,5 @@
 	header('Expires: '. gmdate('D, d M Y H:i:s', time()+60*60).' GMT');
 	header('Etag: '. md5($cachepath . $fmt));
 	readfile($cachepath);
-        require('footer.php');
+	require('footer.php');
 ?>

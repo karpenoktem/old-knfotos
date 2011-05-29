@@ -65,7 +65,7 @@
 					$photo, $path, $or);
 		}
 	}
-        require('footer.php');
+	require('footer.php');
 
 	function scan_gallery($path) {
 		global $fotodir, $albums, $photos, $extensions;

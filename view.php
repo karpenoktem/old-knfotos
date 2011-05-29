@@ -82,7 +82,7 @@
 	template_assign('next');
 	template_assign('prev');
 	template_assign('first');
-	template_assign('title', 'Foto: '. htmlentities($photo['path'] . $photo['name']));	// XXX
+	template_assign('title', 'Foto: '. htmlentities($photo['path'] . $photo['name'])); // XXX
 	show_template('view.tpl');
-        require('footer.php');
+	require('footer.php');
 ?>
