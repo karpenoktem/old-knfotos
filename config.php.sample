@@ -16,5 +16,5 @@
 	$thumbnail_size = '100x';
 	$large_size = '1024x';
 
-        $log_queries = false;
+	$log_queries = false;
 ?>

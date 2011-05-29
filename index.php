@@ -43,18 +43,18 @@
 	if(!empty($_GET['search_album'])) {
 		// Zoeken op naam album
 		$keyword = trim($_GET['search_album']);
-                $res = sql_query("SELECT SQL_CALC_FOUND_ROWS 'album'
-                                AS type, fa_albums.*
+		$res = sql_query("SELECT SQL_CALC_FOUND_ROWS 'album'
+			AS type, fa_albums.*
 			FROM fa_albums
 			WHERE path LIKE %s
 				AND visibility IN (%S)
 				AND (name LIKE %s
 					OR humanname LIKE %s)
 			ORDER BY ". $order ."
-                        LIMIT %i, %i",
-                                $album.'%', getVisibleVisibilities(),
-                                '%'.$keyword.'%', '%'.$keyword.'%',
-                                $offset, $limit);
+			LIMIT %i, %i",
+				$album.'%', getVisibleVisibilities(),
+				'%'.$keyword.'%', '%'.$keyword.'%',
+				$offset, $limit);
 		$extra_params .= '&search_album='. $keyword;
 	} elseif(!empty($_GET['search_tag'])) {
 		// Zoeken op tags
@@ -66,9 +66,9 @@
 				AND fa_photos.path LIKE %s
 				AND fa_photos.visibility IN (%S)
 			ORDER BY ". $order ."
-                        LIMIT %i, %i",
-                        $keyword, $album.'%', getVisibleVisibilities(),
-                        $offset, $limit);
+			LIMIT %i, %i",
+			$keyword, $album.'%', getVisibleVisibilities(),
+			$offset, $limit);
 		$extra_params .= '&search_tag='. $keyword;
 	} else {
 		$keyword = '';
@@ -77,8 +77,8 @@
 			WHERE path=%s
 				AND visibility IN (%S)
 			ORDER BY ". $order ."
-                        LIMIT %i, %i", $album,
-                                getVisibleVisibilities(), $offset, $limit);
+			LIMIT %i, %i", $album,
+				getVisibleVisibilities(), $offset, $limit);
 	}
 
 	$albums = array();
