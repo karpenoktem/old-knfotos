@@ -72,13 +72,19 @@
 		$extra_params .= '&search_tag='. $keyword;
 	} else {
 		$keyword = '';
-		$res = sql_query("SELECT SQL_CALC_FOUND_ROWS *
-			FROM fa_units
-			WHERE path=%s
-				AND visibility IN (%S)
+                $res = sql_query("
+                        (SELECT SQL_CALC_FOUND_ROWS
+                                'photo' as `type`, `id`, name,
+                                path, visibility, name as humanname
+                        FROM fa_photos WHERE path=%s AND visibility IN (%S))
+                        UNION (SELECT
+                                'album' as `type`, `id`, name,
+                                path, visibility, humanname
+                        FROM fa_albums WHERE path=%s AND visibility IN (%S))
 			ORDER BY ". $order ."
-                        LIMIT %i, %i", $album,
-                                getVisibleVisibilities(), $offset, $limit);
+                        LIMIT %i, %i",
+                        $album, getVisibleVisibilities(),
+                        $album, getVisibleVisibilities(), $offset, $limit);
 	}
 
 	$albums = array();
