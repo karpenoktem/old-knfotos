@@ -45,7 +45,7 @@
 	while($row = mysql_fetch_assoc($res)) {
                 // Rens, van -> van Rens
                 $bits = explode(', ', $row['last_name'], 2);
-                $last_name = count($bits) >= 2 ? $bits[0] . $bits[1] : $bits[0];
+                $last_name = count($bits) >= 2 ? $bits[1] .' '. $bits[0] : $bits[0];
 		$users[$row['username']] = $row['first_name']. ' '.$last_name;
 	}
 	$taggedUsers = array();
