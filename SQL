@@ -1,0 +1,28 @@
+CREATE TABLE `fa_photos` (
+	`id` int(11) NOT NULL auto_increment,
+	`name` varchar(64) NOT NULL,
+	`path` varchar(255) NOT NULL,
+	`visibility` enum('deleted','lost','hidden','leden','world') NOT NULL default 'world',
+	`cached` set('thumb','large','invalidated') NOT NULL,
+	`rotation` smallint(6) NOT NULL default '0',
+	`check_tags` tinyint(1) default '0',
+	PRIMARY KEY  (`id`),
+	UNIQUE KEY `path` (`path`,`name`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+CREATE TABLE `fa_albums` (
+	`id` int(11) NOT NULL auto_increment,
+	`name` varchar(64) NOT NULL,
+	`path` varchar(255) NOT NULL,
+	`humanname` varchar(255) default NULL,
+	`visibility` enum('deleted','lost','hidden','leden','world') NOT NULL default 'hidden',
+	`description` text,
+	PRIMARY KEY  (`id`),
+	UNIQUE KEY `path` (`path`,`name`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+CREATE TABLE `fa_tags` (
+	`photo_id` int(11) NOT NULL,
+	`username` varchar(30) NOT NULL,
+	PRIMARY KEY  (`photo_id`,`username`),
+	KEY `username` (`username`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+CREATE VIEW `fa_units` AS select 'album' AS `type`,`fa_albums`.`id` AS `id`,`fa_albums`.`name` AS `name`,`fa_albums`.`path` AS `path`,`fa_albums`.`humanname` AS `humanname`,`fa_albums`.`visibility` AS `visibility` from `fa_albums` union select _utf8'photo' AS `type`,`fa_photos`.`id` AS `id`,`fa_photos`.`name` AS `name`,`fa_photos`.`path` AS `path`,NULL AS `NULL`,`fa_photos`.`visibility` AS `visibility` from `fa_photos`;
