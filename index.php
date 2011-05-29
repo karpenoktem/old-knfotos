@@ -77,7 +77,7 @@
 			WHERE path=%s
 				AND visibility IN (%S)
 			ORDER BY ". $order ."
-                        LIMIT %i, %i, ". $limit, $album,
+                        LIMIT %i, %i", $album,
                                 getVisibleVisibilities(), $offset, $limit);
 	}
 
