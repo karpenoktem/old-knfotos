@@ -37,4 +37,5 @@ while($row = mysql_fetch_assoc($res)) {
                 echo "\n".$path." ".$row['rotation']." -> ".$or."\n";
         }
 }
+require('footer.php');
 ?>

@@ -133,4 +133,5 @@
 	template_assign('last');
 
 	show_template('index.tpl');
+        require('footer.php');
 ?>
