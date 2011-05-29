@@ -13,7 +13,7 @@
 <?php show_template('actions.tpl'); ?>
 			</div>
 			<div id="footer">
-				&copy;2009-2011, Jille Timmermans & Bart Schuurmans; Karpe Noktem
+				&copy;2009-2011, Karpe Noktem (<a href="http://github.com/karpenoktem/knfotos">broncode</a>)
 			</div>
 		</div>
 	</body>
