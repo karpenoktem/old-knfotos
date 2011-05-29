@@ -37,4 +37,5 @@
                                 $cached, $id);
 		echo "\n";
 	}
+        require('footer.php');
 ?>
