@@ -54,7 +54,11 @@
 		die('Could not switch database');
 	}
 
-	if(!$cli_mode) {
+	if($cli_mode) {
+		if(PHP_SAPI != 'cli') {
+			die("This script should only be run from the commandline\n");
+		}
+	} else {
 		if(!is_file($cachedir .'.htaccess') && !isset($no_cache_htaccess)) {
 			die('You should create an .htaccess file in your cache dir.<br>Add <i>$no_cache_htaccess=true;</i> to your config.php to ignore this.<br>Or create one with contents like this:<br>Order allow,deny<br>Deny from all');
 		}
