@@ -84,4 +84,5 @@
 	template_assign('first');
 	template_assign('title', 'Foto: '. htmlentities($photo['path'] . $photo['name']));	// XXX
 	show_template('view.tpl');
+        require('footer.php');
 ?>

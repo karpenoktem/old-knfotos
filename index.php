@@ -43,18 +43,18 @@
 	if(!empty($_GET['search_album'])) {
 		// Zoeken op naam album
 		$keyword = trim($_GET['search_album']);
-                $res = sql_query("SELECT SQL_CALC_FOUND_ROWS 'album'
-                                AS type, fa_albums.*
+		$res = sql_query("SELECT SQL_CALC_FOUND_ROWS 'album'
+			AS type, fa_albums.*
 			FROM fa_albums
 			WHERE path LIKE %s
 				AND visibility IN (%S)
 				AND (name LIKE %s
 					OR humanname LIKE %s)
 			ORDER BY ". $order ."
-                        LIMIT %i, %i",
-                                $album.'%', getVisibleVisibilities(),
-                                '%'.$keyword.'%', '%'.$keyword.'%',
-                                $offset, $limit);
+			LIMIT %i, %i",
+				$album.'%', getVisibleVisibilities(),
+				'%'.$keyword.'%', '%'.$keyword.'%',
+				$offset, $limit);
 		$extra_params .= '&search_album='. $keyword;
 	} elseif(!empty($_GET['search_tag'])) {
 		// Zoeken op tags
@@ -66,18 +66,25 @@
 				AND fa_photos.path LIKE %s
 				AND fa_photos.visibility IN (%S)
 			ORDER BY ". $order ."
-                        LIMIT %i, %i",
-                        $keyword, $album.'%', getVisibleVisibilities(),
-                        $offset, $limit);
+			LIMIT %i, %i",
+			$keyword, $album.'%', getVisibleVisibilities(),
+			$offset, $limit);
 		$extra_params .= '&search_tag='. $keyword;
 	} else {
 		$keyword = '';
-		$res = mysql_query("SELECT SQL_CALC_FOUND_ROWS *
-			FROM fa_units
-			WHERE path='". addslashes($album) ."'
-				AND visibility IN ('". implode("','", getVisibleVisibilities()) ."')
+                $res = sql_query("
+                        (SELECT SQL_CALC_FOUND_ROWS
+                                'photo' as `type`, `id`, name,
+                                path, visibility, name as humanname
+                        FROM fa_photos WHERE path=%s AND visibility IN (%S))
+                        UNION (SELECT
+                                'album' as `type`, `id`, name,
+                                path, visibility, humanname
+                        FROM fa_albums WHERE path=%s AND visibility IN (%S))
 			ORDER BY ". $order ."
-			LIMIT ". $offset .", ". $limit);
+                        LIMIT %i, %i",
+                        $album, getVisibleVisibilities(),
+                        $album, getVisibleVisibilities(), $offset, $limit);
 	}
 
 	$albums = array();
@@ -97,7 +104,7 @@
 		}
 	}
 
-	$res = mysql_query('SELECT FOUND_ROWS()');
+	$res = sql_query('SELECT FOUND_ROWS()');
 	$row = mysql_fetch_row($res);
 	$last = floor($row[0] / $limit);
 
@@ -126,4 +133,5 @@
 	template_assign('last');
 
 	show_template('index.tpl');
+        require('footer.php');
 ?>

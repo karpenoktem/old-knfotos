@@ -2,7 +2,7 @@
 	$cli_mode = true;
 	require('header.php');
 
-	$res = mysql_query("SELECT * FROM fa_photos WHERE ((NOT FIND_IN_SET('thumb', cached) OR NOT FIND_IN_SET('large', cached)) OR FIND_IN_SET('invalidated', cached)) AND visibility IN('hidden', 'leden', 'world') ORDER BY FIND_IN_SET('invalidated', cached), RAND()");
+	$res = sql_query("SELECT * FROM fa_photos WHERE ((NOT FIND_IN_SET('thumb', cached) OR NOT FIND_IN_SET('large', cached)) OR FIND_IN_SET('invalidated', cached)) AND visibility IN('hidden', 'leden', 'world') ORDER BY FIND_IN_SET('invalidated', cached), RAND()");
 	while($row = mysql_fetch_assoc($res)) {
 		echo '==> '. $row['path'] . $row['name'] ."\n";
 		if(!is_dir($cachedir . $row['path'])) {
@@ -33,7 +33,9 @@
 			$cached[] = 'large';
 		}
 		echo "===> Updating";
-		mysql_query("UPDATE fa_photos SET cached='". implode(',', $cached) ."' WHERE id=". $row['id']);
+                sql_query("UPDATE fa_photos SET cached=%S WHERE id=%i",
+                                $cached, $id);
 		echo "\n";
 	}
+        require('footer.php');
 ?>

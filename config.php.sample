@@ -15,4 +15,6 @@
 	$imagick = '/usr/local/bin/convert'; // or false to use GD
 	$thumbnail_size = '100x';
 	$large_size = '1024x';
+
+	$log_queries = false;
 ?>
