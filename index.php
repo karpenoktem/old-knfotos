@@ -72,12 +72,13 @@
 		$extra_params .= '&search_tag='. $keyword;
 	} else {
 		$keyword = '';
-		$res = mysql_query("SELECT SQL_CALC_FOUND_ROWS *
+		$res = sql_query("SELECT SQL_CALC_FOUND_ROWS *
 			FROM fa_units
-			WHERE path='". addslashes($album) ."'
-				AND visibility IN ('". implode("','", getVisibleVisibilities()) ."')
+			WHERE path=%s
+				AND visibility IN (%S)
 			ORDER BY ". $order ."
-			LIMIT ". $offset .", ". $limit);
+                        LIMIT %i, %i, ". $limit, $album,
+                                getVisibleVisibilities(), $offset, $limit);
 	}
 
 	$albums = array();
@@ -97,7 +98,7 @@
 		}
 	}
 
-	$res = mysql_query('SELECT FOUND_ROWS()');
+	$res = sql_query('SELECT FOUND_ROWS()');
 	$row = mysql_fetch_row($res);
 	$last = floor($row[0] / $limit);
 
