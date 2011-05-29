@@ -33,9 +33,20 @@
 	$visibility = $photo['visibility'];
 	$rotation = $photo['rotation'];
 	$users = array();
-	$res = sql_query("SELECT username FROM kn_site.auth_user ORDER BY username");
+        $res = sql_query("SELECT u.username, u.first_name, u.last_name
+                          FROM kn_site.auth_group g
+                          LEFT JOIN kn_site.auth_user_groups r
+                                ON g.id = r.group_id
+                          LEFT JOIN kn_site.auth_user u
+                                ON u.id = r.user_id
+                          WHERE g.name = 'leden' OR
+                                g.name = 'leden-oud'
+                          ORDER BY username");
 	while($row = mysql_fetch_assoc($res)) {
-		$users[$row['username']] = $row['username'];
+                // Rens, van -> van Rens
+                $bits = explode(', ', $row['last_name'], 2);
+                $last_name = count($bits) >= 2 ? $bits[1] .' '. $bits[0] : $bits[0];
+		$users[$row['username']] = $row['first_name']. ' '.$last_name;
 	}
 	$taggedUsers = array();
 	$res = sql_query("SELECT username FROM fa_tags WHERE photo_id=%i", $photo['id']);
