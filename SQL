@@ -25,4 +25,3 @@ CREATE TABLE `fa_tags` (
 	PRIMARY KEY  (`photo_id`,`username`),
 	KEY `username` (`username`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-CREATE VIEW `fa_units` AS select 'album' AS `type`,`fa_albums`.`id` AS `id`,`fa_albums`.`name` AS `name`,`fa_albums`.`path` AS `path`,`fa_albums`.`humanname` AS `humanname`,`fa_albums`.`visibility` AS `visibility` from `fa_albums` union select _utf8'photo' AS `type`,`fa_photos`.`id` AS `id`,`fa_photos`.`name` AS `name`,`fa_photos`.`path` AS `path`,NULL AS `NULL`,`fa_photos`.`visibility` AS `visibility` from `fa_photos`;
