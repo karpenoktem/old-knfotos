@@ -55,7 +55,7 @@
 	$prev = false;
 	$first = false;
 
-	$res = sql_query("SELECT name FROM fa_albums WHERE path=%s AND visibility IN (%S) ORDER BY name", $album, getVisibleVisibilities());
+	$res = sql_query("SELECT name FROM fa_photos WHERE path=%s AND visibility IN (%S) ORDER BY name", $album, getVisibleVisibilities());
 	while($row = mysql_fetch_assoc($res)) {
 		if(!$first) {
 			$first = $album . $photo['name'];
