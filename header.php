@@ -256,11 +256,20 @@
 		sql_query("DELETE FROM fa_tags WHERE photo_id=%i", $id);
 
 		if($tags) {
+                        $args = array();
 			$sql = "INSERT INTO fa_tags (photo_id, username) VALUES ";
+                        $first = false;
 			foreach($tags as $tag) {
-				$sql .= "(". $id .", '". $tag ."'),";
+                                if(!$first)
+                                        $first = true;
+                                else
+                                        $sql .= ',';
+				$sql .= "(%i, %s)";
+                                $args[]= $id;
+                                $args[]= $tag;
 			}
-			mysql_query(substr($sql, 0, -1));
+                        call_user_func_array(sql_query,
+                                array_merge(array($sql), $args));
 		}
 		return true;
 	}
