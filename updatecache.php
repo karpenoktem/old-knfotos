@@ -34,7 +34,7 @@
 		}
 		echo "===> Updating";
 		sql_query("UPDATE fa_photos SET cached=%S WHERE id=%i",
-				$cached, $id);
+				$cached, $row['id']);
 		echo "\n";
 	}
 	require('footer.php');
