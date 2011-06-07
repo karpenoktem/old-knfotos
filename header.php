@@ -276,7 +276,7 @@
 				$args[]= $id;
 				$args[]= $tag;
 			}
-			call_user_func_array(sql_query,
+			call_user_func_array('sql_query',
 				array_merge(array($sql), $args));
 		}
 		return true;
