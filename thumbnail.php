@@ -18,7 +18,12 @@
 	}
 
 	if($row['type'] == 'album') {
-		$res = sql_query("SELECT * FROM fa_photos WHERE path LIKE %s AND FIND_IN_SET('thumb', cached) ORDER BY RAND() LIMIT 1", $row['path'] . $row['name'] .'/%');
+		$res = sql_query("SELECT path, name FROM fa_albums WHERE path LIKE %s AND visibility IN (%S)", $row['path'] . $row['name'] .'/%', getVisibleVisibilities());
+		$subalbums = array($row['path'] . $row['name'] .'/');
+		while($album = mysql_fetch_assoc($res)) {
+			$subalbums[] = $album['path'] . $album['name'] .'/';
+		}
+		$res = sql_query("SELECT * FROM fa_photos WHERE path IN(%S) AND FIND_IN_SET('thumb', cached) AND visibility IN (%S) ORDER BY RAND() LIMIT 1", $subalbums, getVisibleVisibilities());
 		if(!$row = mysql_fetch_assoc($res)) { 
 			header('HTTP/1.1 404 Not Found');
 			showTextAsImage('No photo with thumbnail found for album');
