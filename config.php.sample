@@ -16,5 +16,10 @@
 	$thumbnail_size = '100x';
 	$large_size = '1024x';
 
+	$db_host = 'localhost';
+	$db_user = 'knfotos';
+	$db_db = 'knfotos';
+	$db_pass = 'abc';
+
 	$log_queries = false;
 ?>
