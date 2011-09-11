@@ -10,9 +10,13 @@
 	$fnew_date = $f->createInputField('text', 'new_date', true, 'Datum');
 	$fnew_date->setDefaultValue(date('Y-m-d'));
 	$fnew_date->addValidationCallback('validate_english_date');
+	$fnew_date->setAttribute('onBlur', 'createFullHumanname();');
 
 	$fnew_humanname = $f->createInputField('text', 'new_humanname', false, 'Naam voor mensen');
-	$fnew_humanname->setAttribute('onBlur', 'createTechName();');
+	$fnew_humanname->setAttribute('onBlur', 'createTechName(); createFullHumanname();');
+
+	$fnew_humanname_full = $f->createInputField('text', 'new_humanname_full', false, 'Volledige naam voor mensen');
+
 	$fnew_name = $f->createInputField('text', 'new_name', true, 'Naam voor computers');
 	$fnew_name->addValidationCallback('validate_name');
 
@@ -26,10 +30,17 @@
 	}
 
 	if($f->isSubmitted()) {
-		// XXX datum omzetten naar .nl en meegeven als humanname
 		$fh = fsockopen('unix:///var/run/infra/S-francisca');
 		if($fh) {
-			fwrite($fh, json_encode(array('command' => 'fotoadmin-create-event.php', 'arguments' => array($fnew_date->getValue(), $fnew_name->getValue(), $fnew_humanname->getValue()))) ."\n");
+			$args = array();
+			$args[] = $fnew_date->getValue();
+			$args[] = $fnew_name->getValue();
+			if($fnew_humanname_full->getValue() != '') {
+				$args[] = $fnew_humanname_full->getValue();
+			} elseif($fnew_humanname->getValue() != '') {
+				$args[] = $fnew_humanname->getValue();
+			}
+			fwrite($fh, json_encode(array('command' => 'fotoadmin-create-event.php', 'arguments' => $args)) ."\n");
 			tpl_set('formErrors', array(stream_get_contents($fh)));
 			fclose($fh);
 		} else {
