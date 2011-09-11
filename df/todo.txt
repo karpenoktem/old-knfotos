@@ -1,0 +1,16 @@
+* velden uitbreiden:
+  - button
+  - decimal
+  - date/time
+q arrays
+* javascript
+  F validationCallbacks
+  F validationRegexes
+  - AJAX submitting
+* errorList
+* form validation
+* magic_quotes_gpc goed afhandelen
+* smarty plugin
+* docs + website
+* naam
+* alle XXX wegwerken

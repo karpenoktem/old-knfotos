@@ -1,0 +1,8 @@
+==> Eisen:
+* Makkelijk uitbreidbaar
+* Redelijk portable - zo min mogelijk dependen op andere dingen
+  * Niet vastpinnen op 1 template engine
+* Fijn om mee te werken
+* Gaat niet op zn bek zonder JavaScript
+* meerdere formulieren per pagina
+* support voor array fields
