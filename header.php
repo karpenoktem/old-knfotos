@@ -162,11 +162,7 @@
 			}
 			$_SESSION['user'] = $_GET['user'];
 
-			$res = sql_query("SELECT auth_group.name FROM kn_site.auth_user, kn_site.auth_user_groups, kn_site.auth_group WHERE auth_user.id = auth_user_groups.user_id AND auth_user_groups.group_id = auth_group.id AND auth_user.is_active AND auth_user.username=%s AND auth_group.name IN('webcie', 'fotocie', 'fototaggers')", $_SESSION['user']);
-			$_SESSION['groups'] = array();
-			while($row = mysql_fetch_assoc($res)) {
-				$_SESSION['groups'][] = $row['name'];
-			}
+			$_SESSION['isAdmin'] = userIsInGroup($_SESSION['user'], array('webcie', 'fotocie', 'fototaggers'));
 
 			if(isset($_SESSION['entry_url'])) {
 				header('Location: '. $_SESSION['entry_url']);
@@ -183,14 +179,14 @@
 			header('Location: http://www.karpenoktem.nl/accounts/rauth/?url=http://'. $domain . $absolute_url_path);
 			exit;
 		} elseif(isset($_GET['logout'])) {
-			unset($_SESSION['user'], $_SESSION['groups']);
+			unset($_SESSION['user'], $_SESSION['isAdmin']);
 			header('Location: '. $_SERVER['REQUEST_URI']);
 			exit;
 		}
 	}
 
 	function isAdmin() {
-		return (isset($_SESSION['groups']) && count($_SESSION['groups']) > 0);
+		return isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'];
 	}
 
 	function isLid() {
@@ -254,9 +250,7 @@
 		}
 		if($tags) {
 			$tags = explode(',', $tags);
-			$res = sql_query("SELECT COUNT(*) FROM kn_site.auth_user WHERE username IN (%S)", $tags);
-			$row = mysql_fetch_row($res);
-			if(count($tags) != $row[0]) {
+			if(!checkUsernames($tags)) {
 				return false;
 			}
 		}
@@ -316,5 +310,58 @@
 			}
 		}
 		return false;
+	}
+
+	function getMongoHandle() {
+		global $mongo_host, $mongo_db;
+		static $mdb = NULL;
+		if(!$mdb) {
+			$m = new Mongo('mongodb://'. $mongo_host);
+			$mdb = $m->selectDB($mongo_db);
+		}
+		return $mdb;
+	}
+
+	function userIsInGroup($user, array $groups) {
+		$mdb = getMongoHandle();
+
+		// $ids zoeken van de groepen
+		$res = $mdb->entities->find(array('names' => array('$in' => $groups)), array('_id'));
+		$gids = array();
+		foreach($res as $group) {
+			$gids[] = $group['_id'];
+		}
+
+		// $id zoeken van de user
+		$res = $mdb->entities->find(array('names' => $user), array('_id'));
+		$uid = array();
+		foreach($res as $row) {
+			$uid = $row['_id'];
+		}
+
+		$now = new MongoDate(time());
+		$res = $mdb->relations->find(array('from' => array('$lte' => $now), 'until' => array('$gte' => $now), 'how' => NULL, 'with' => array('$in' => $gids), 'who' => $uid));
+		return ($res->count() > 0);
+	}
+
+	function getUsersWithLastNames() {
+		$mdb = getMongoHandle();
+		$res = $mdb->entities->find(array('types' => 'user'), array('names', 'person.family'));
+		$out = array();
+		foreach($res as $row) {
+			$out[$row['names'][0]] = $row['person']['family'];
+		}
+		ksort($out);
+		return $out;
+	}
+
+	function checkUsernames(array $usernames) {
+		$mdb = getMongoHandle();
+		$res = $mdb->entities->find(array('types' => 'user'), array('names'));
+		$users = array();
+		foreach($res as $row) {
+			$users[] = $row['names'][0];
+		}
+		return (count($usernames) == count(array_intersect($users, $usernames)));
 	}
 ?>

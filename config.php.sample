@@ -21,5 +21,8 @@
 	$db_db = 'knfotos';
 	$db_pass = 'abc';
 
+	$mongo_host = 'localhost';
+	$mongo_db = 'users';
+
 	$log_queries = false;
 ?>
