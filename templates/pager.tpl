@@ -1,31 +1,40 @@
 <table class="pager">
 	<tr>
-		<td>
-<?php if($page > 0) { ?>
-			<a href="<?= $url ?>&page=0">Eerste</a>
-<?php } ?>
-		</td>
-		<td>
-<?php if($page > 0) { ?>
-			<a href="<?= $url ?>&page=<?= $page -1 ?>">Vorige</a>
-<?php } ?>
-		</td>
-<?php for($p = 0; $last >= $p; $p++) { ?>
+               <td><a <?php if($page > 0) { ?>
+                               href="<?= $url ?>&page=0"
+                      <?php } else { ?>
+                               class="invalid"
+                      <?php } ?>>Eerste</a></td>
+               <td><a <?php if($page > 0) { ?>
+                               href="<?= $url ?>&page=<?= $page -1 ?>"
+                      <?php } else {  ?>
+                               class="invalid"
+                      <?php } ?>>Vorige</a></td>
+<?php $p = -1;
+       while($p < $last) {
+               $p++;
+               if($p > 3 && $page - 3 > $p) { ?>
+                       <td>&hellip;</td>
+                       <?php $p = $page - 3;
+               } elseif($p > 4 + $page && $last - 3 > $p) { ?>
+                       <td>&hellip;</td>
+                       <?php $p = $last - 3;
+               }?>
 <?php if($p == $page) { ?>
 		<td class="current"><?= $p+1 ?></td>
 <?php } else { ?>
 		<td><a href="<?= $url ?>&page=<?= $p ?>"><?= $p+1 ?></a></td>
 <?php } ?>
 <?php } ?>
-		<td>
-<?php if($last > $page) { ?>
-			<a href="<?= $url ?>&page=<?= $page + 1 ?>">Volgende</a>
-<?php } ?>
-		</td>
-		<td>
-<?php if($last > $page) { ?>
-			<a href="<?= $url ?>&page=<?= $last ?>">Laatste</a>
-<?php } ?>
-		</td>
+               <td><a <?php if($page < $last) { ?>
+                               href="<?= $url ?>&page=<?= $page + 1 ?>"
+                      <?php } else {  ?>
+                               class="invalid"
+                      <?php } ?>>Volgende</a></td>
+               <td><a <?php if($page < $last) { ?>
+                               href="<?= $url ?>&page=<?= $last ?>"
+                      <?php } else { ?>
+                               class="invalid"
+                      <?php } ?>>Laatste</a></td>
 	</tr>
 </table>
