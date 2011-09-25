@@ -36,6 +36,5 @@
                       <?php } else { ?>
                                class="invalid"
                       <?php } ?>>Laatste</a></td>
-		<td>
 	</tr>
 </table>
