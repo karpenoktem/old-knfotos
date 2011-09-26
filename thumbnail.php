@@ -14,7 +14,7 @@
 
 	if(!in_array($row['visibility'], getVisibleVisibilities()) || !isPathVisible($row['path'])) {
 		header('HTTP/1.1 403 Access denied');
-		die('Access denied');
+		showTextAsImage('Access denied');
 	}
 
 	if($row['type'] == 'album') {
