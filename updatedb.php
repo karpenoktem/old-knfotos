@@ -2,18 +2,19 @@
 	$cli_mode = true;
 	require('header.php');
 
-	// XXX lost dingen recoveren
-
 	$albums = array();
 	$photos = array();
 	scan_gallery('');
 
-	$res = sql_query('SELECT name, path FROM fa_albums');
+	$res = sql_query('SELECT name, path, visibility FROM fa_albums');
 	while($row = mysql_fetch_assoc($res)) {
 		if(!isset($albums[$row['path']]) || !in_array($row['name'], $albums[$row['path']])) {
 			sql_query("UPDATE fa_albums SET visibility='lost' WHERE name=%s AND path=%s", $row['name'], $row['path']);
 		} else {
 			unset($albums[$row['path']][array_search($row['name'], $albums[$row['path']])]);
+			if($row['visibility'] == 'lost') {
+				sql_query("UPDATE fa_albums SET visibility='hidden' WHERE name=%s AND path=%s", $row['name'], $row['path']);
+			}
 		}
 	}
 
@@ -25,12 +26,15 @@
 		}
 	}
 
-	$res = sql_query('SELECT name, path FROM fa_photos');
+	$res = sql_query('SELECT name, path, visibility FROM fa_photos');
 	while($row = mysql_fetch_assoc($res)) {
 		if(!isset($photos[$row['path']]) || !in_array($row['name'], $photos[$row['path']])) {
 			sql_query("UPDATE fa_photos SET visibility='lost' WHERE name=%s AND path=%s", $row['name'], $row['path']);
 		} else {
 			unset($photos[$row['path']][array_search($row['name'], $photos[$row['path']])]);
+			if($row['visibility'] == 'lost') {
+				sql_query("UPDATE fa_photos SET visibility='hidden' WHERE name=%s AND path=%s", $row['name'], $row['path']);
+			}
 		}
 	}
 
