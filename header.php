@@ -259,7 +259,7 @@
 
 		if($tags) {
 			$args = array();
-                        $sql = "INSERT INTO fa_tags (photo_id, username, createdby) VALUES ";
+			$sql = "INSERT INTO fa_tags (photo_id, username, createdby) VALUES ";
 			$first = false;
 			foreach($tags as $tag) {
 				if(!$first)
