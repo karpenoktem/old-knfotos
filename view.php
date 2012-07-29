@@ -5,7 +5,8 @@
 		header('HTTP/1.1 400 Bad Request');
 		die("Missing parameter");
 	}
-	if(isAdmin() && isset($_GET['updatePhoto'], $_GET['visibility'], $_GET['rotation'], $_GET['tags'])) {
+        if(isAdmin() && isset($_GET['updatePhoto'], $_GET['visibility'], $_GET['rotation'], $_GET['tags'])) {
+                CsrfToken::checkOrDie();
 		if(!updatePhotoMetadata($_GET['updatePhoto'], $_GET['visibility'], $_GET['rotation'], $_GET['tags'])) {
 			header('HTTP/1.1 400 Bad Request');
 			die('Er is een fout opgetreden');

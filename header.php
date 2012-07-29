@@ -1,9 +1,11 @@
 <?php
+
 	$log_queries__start_time = microtime(true);
 	error_reporting(E_ALL);
 	ini_set('display_errors', 1);
 	ini_set('log_errors', 0);
-
+        
+       
 	define('UNIT_PHOTO', 1);
 	define('UNIT_ALBUM', 2);
 	define('UNIT_BOTH', UNIT_PHOTO | UNIT_ALBUM);
@@ -364,5 +366,44 @@
 			$users[] = $row['names'][0];
 		}
 		return (count($usernames) == count(array_intersect($users, $usernames)));
-	}
+        }
+
+        /* CsrfToken class */
+        class CsrfToken {
+		private $token;
+
+		function __construct() {
+			if (isset($_COOKIE["csrftoken"])) {
+				$this->token = $_COOKIE["csrftoken"];
+			} else {
+				$this->token = md5(mt_rand());
+				setcookie("csrftoken", $this->token);
+			}
+		}
+
+		public static function check($data=null) {
+			$data = is_null($data) ? $_POST : $data;
+			if (! isset($data['csrftoken'])) return false;
+			if (! isset($_COOKIE['csrftoken'])) return false;
+			return ($data['csrftoken'] == $_COOKIE['csrftoken']);
+		}
+
+		public static function checkOrDie($data=null) {
+			$data = is_null($data) ? $_POST : $data;
+			if (! self::check($data)) {
+				die("CSRF check failed!");
+			}
+		}
+
+                public function get() {
+			return $this->token;
+		}
+
+		public function printField() {
+			echo '<input type="hidden" name="csrftoken" value="' . $this->token . '" />' . "\n";
+		}
+        }
+        $csrfToken = new CsrfToken();
+        template_assign('csrfToken');
+
 ?>
