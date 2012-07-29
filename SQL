@@ -22,6 +22,7 @@ CREATE TABLE `fa_albums` (
 CREATE TABLE `fa_tags` (
 	`photo_id` int(11) NOT NULL,
 	`username` varchar(30) NOT NULL,
+	`createdby` varchar(30) NOT NULL,
 	PRIMARY KEY  (`photo_id`,`username`),
 	KEY `username` (`username`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

@@ -259,16 +259,17 @@
 
 		if($tags) {
 			$args = array();
-			$sql = "INSERT INTO fa_tags (photo_id, username) VALUES ";
+			$sql = "INSERT INTO fa_tags (photo_id, username, createdby) VALUES ";
 			$first = false;
 			foreach($tags as $tag) {
 				if(!$first)
 					$first = true;
 				else
 					$sql .= ',';
-				$sql .= "(%i, %s)";
-				$args[]= $id;
-				$args[]= $tag;
+				$sql .= "(%i, %s, %s)";
+				$args[] = $id;
+                                $args[] = $tag;
+                                $args[] = $_SESSION['user'];
 			}
 			call_user_func_array('sql_query',
 				array_merge(array($sql), $args));
