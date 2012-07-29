@@ -2,7 +2,7 @@
 				<legend>Zoeken</legend>
 				<table>
 					<form action=".">
-                                                <?php $csrfToken->printField() ?>
+						<?php $csrfToken->printField() ?>
 						<tr>
 							<th>Album:</th>
 						</tr>
@@ -11,7 +11,7 @@
 						</tr>
 					</form>
 					<form action=".">
-                                                <?php $csrfToken->printField() ?>
+						<?php $csrfToken->printField() ?>
 						<input type="hidden" name="album" value="<?PHP echo isset($album) ? $album : (isset($_GET['album']) ? $_GET['album'] : ''); ?>" />
 						<tr>
 							<th>Lid:</th>

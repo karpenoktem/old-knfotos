@@ -1,7 +1,7 @@
 <?php
 	require('header.php');
 
-        CsrfToken::checkOrDie();
+	CsrfToken::checkOrDie();
 
 	if(isAdmin() && isset($_POST['updatePhoto'], $_POST['visibility'], $_POST['rotation'], $_POST['tags'])) {
 		if(!updatePhotoMetadata($_POST['updatePhoto'], $_POST['visibility'], $_POST['rotation'], $_POST['tags'])) {
