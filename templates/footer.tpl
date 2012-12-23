@@ -6,7 +6,7 @@
 <?PHP } ?>
 					<ul>
 <?PHP foreach($parentalbums as $pa) { ?>
-						<li><a href="./?album=<?= urlencode($pa['path'] . $pa['name']); ?>"><?= htmlentities($pa['humanname']); ?></a></li>
+						<li><a href="./?album=<?= urlencode($pa['path'] . $pa['name']); ?>"><?= htmlentities($pa['humanname'] ?: $pa['name']); ?></a></li>
 <?PHP } ?>
 					</ul>
 				</ul>

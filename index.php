@@ -18,6 +18,7 @@
 		$album = '';
 		$order = 'id DESC';
 		$humanname = 'Fotoalbum';
+		$displayname = $humanname;
 		$parentalbums = array();
 	} else {
 		$row = getUnitByFullPath(substr($album, 0, -1));
@@ -36,6 +37,7 @@
 		$id = $row['id'];
 		$visibility = $row['visibility'];
 		$humanname = $row['humanname'];
+		$displayname = $humanname ?: $row['name'];
 		$order = 'name';
 	}
 
@@ -94,7 +96,7 @@
 			$albums[] = array(
 				'name' => $row['name'],
 				'fullpath' => $row['path'] . $row['name'],
-				'humanname' => $row['humanname'] ? $row['humanname'] : $row['name']
+				'displayname' => $row['humanname'] ?: $row['name'],
 			);
 		} else {
 			$photos[] = array(
@@ -121,10 +123,11 @@
 		template_assign('parentalbum');
 	}
 	template_assign('parentalbums');
-	template_assign('title', $humanname);	// XXX
+	template_assign('title', $displayname);	// XXX
 	template_assign('id');
 	template_assign('visibility');
 	template_assign('humanname');
+	template_assign('displayname');
 
 	// Paging
 	$url = './?album='. urlencode($album) . $extra_params;

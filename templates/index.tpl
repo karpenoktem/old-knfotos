@@ -8,7 +8,7 @@
 						<a class="prev invalid" href="#">&laquo; Vorige</a>
 <?PHP } ?>
 					</td>
-					<td class="name"><?= htmlentities($humanname); ?></td>
+					<td class="name"><?= htmlentities($displayname); ?></td>
 					<td class="next">
 <?PHP if($last > $page) { ?>
 						<a class="next" href="<?= $url ?>&page=<?= $page + 1 ?>">Volgende &raquo;</a>
@@ -23,7 +23,7 @@
 <?PHP foreach(array_chunk($albums, $thumbs_per_row) as $row) { ?>
 				<tr>
 <?PHP foreach($row as $album) { ?>
-					<td class="album" width="<?= floor(100/$thumbs_per_row); ?>%"><a href=".?album=<?= urlencode($album['fullpath']) ?>"><img src="thumbnail.php?foto=<?= urlencode($album['fullpath']) ?>"><?= htmlentities($album['humanname']) ?>/</a></td>
+					<td class="album" width="<?= floor(100/$thumbs_per_row); ?>%"><a href=".?album=<?= urlencode($album['fullpath']) ?>"><img src="thumbnail.php?foto=<?= urlencode($album['fullpath']) ?>"><?= htmlentities($album['displayname']) ?>/</a></td>
 <?PHP } ?>
 				</tr>
 <?PHP } ?>
