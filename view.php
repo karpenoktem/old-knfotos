@@ -33,8 +33,11 @@
 	$visibility = $photo['visibility'];
 	$rotation = $photo['rotation'];
 	$users = array();
-	foreach(getUsersWithLastNames() as $username => $last_name) {
-		$users[$username] = $username . ' ('. $last_name .')';
+	if (isAdmin()) {
+		// $users is only used when isAdmin()
+		foreach(getUsersWithLastNames() as $username => $last_name) {
+			$users[$username] = $username . ' ('. $last_name .')';
+		}
 	}
 	$taggedUsers = array();
 	$res = sql_query("SELECT username FROM fa_tags WHERE photo_id=%i", $photo['id']);
