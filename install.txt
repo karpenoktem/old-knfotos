@@ -1,0 +1,12 @@
+* Copy config.php.sample to config.php and set various config options
+* Create new MySQL user and adjust config.php if necessary. Hint:
+	CREATE DATABASE knfotos;
+	GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP ON knfotos.* TO knfotos@localhost IDENTIFIED BY 'abc';
+* Set up database tables. Hint:
+	USE knfotos
+	SOURCE SQL
+* run `php updatedb.php`
+* run `php updatecache.php`
+* run these SQL queries to make the photos visible:
+	update fa_albums set visibility='world' where visibility='hidden';
+	update fa_photos set visibility='world' where visibility='hidden';
