@@ -31,7 +31,7 @@
 	// insert new albums
 	foreach($albums as $path=>$dirs) {
 		foreach($dirs as $album) {
-			if(isset($photos[$path . $album .'/']) || isset($albums[$path . $album .'/'])) {
+			if(isset($photos[$path . $album .'/']) || isset($videos[$path . $album .'/']) || isset($albums[$path . $album .'/'])) {
 				sql_query("INSERT INTO fa_albums (name, path) VALUES (%s, %s)", $album, $path);
 			}
 		}
