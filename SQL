@@ -14,7 +14,7 @@ CREATE TABLE `fa_videos` (
 	`name` varchar(64) NOT NULL,
 	`path` varchar(255) NOT NULL,
 	`visibility` enum('deleted','lost','hidden','leden','world') NOT NULL default 'world',
-	`cached` set('thumb','320p', '640p','invalidated') NOT NULL,
+	`cached` set('thumb','360p', '720p','invalidated') NOT NULL,
 	`check_tags` tinyint(1) default '0',
 	PRIMARY KEY  (`id`),
 	UNIQUE KEY `path` (`path`,`name`)
