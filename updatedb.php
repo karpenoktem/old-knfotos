@@ -9,6 +9,7 @@
 
 	$albums = array();
 	$photos = array();
+	$videos = array();
 	scan_gallery('');
 	// now the $albums and $photos contain all albums/photos in the $fotodir
 
@@ -83,11 +84,40 @@
 				die (mysql_error());
 		}
 	}
+
+
+	// check each video
+	$res = sql_query('SELECT name, path, visibility FROM fa_videos');
+	while($row = mysql_fetch_assoc($res)) {
+		// if the photo in the db isn't in $fotodir anymore, set it to lost
+		if(!isset($videos[$row['path']]) || !in_array($row['name'], $videos[$row['path']])) {
+			sql_query("UPDATE fa_videos SET visibility='lost' WHERE name=%s AND path=%s", $row['name'], $row['path']);
+		} else {
+			unset($videos[$row['path']][array_search($row['name'], $videos[$row['path']])]);
+			if($row['visibility'] == 'lost') {
+				sql_query("UPDATE fa_videos SET visibility='hidden' WHERE name=%s AND path=%s", $row['name'], $row['path']);
+			}
+		}
+	}
+	// $videos now only contains new videos
+
+	// insert remaining videos
+	foreach($videos as $path=>$dirs) {
+		foreach($dirs as $video) {
+			if (!sql_query("INSERT INTO fa_videos (
+					name,
+					path)
+				VALUES (%s, %s)",
+					$video, $path))
+				die (mysql_error());
+		}
+	}
+
 	require('footer.php');
 
 	/* This recursively scans the $fotodir and stores the results in $albums and $photos */
 	function scan_gallery($path) {
-		global $fotodir, $albums, $photos, $extensions;
+		global $fotodir, $albums, $photos, $videos, $photoExtensions, $videoExtensions;
 		echo 'scanning '.$path."\n";
 
 		foreach(scandir($fotodir . $path) as $fn) {
@@ -99,9 +129,12 @@
 				if(is_dir($subpath)) {
 					$albums[$path][] = $fn;
 					scan_gallery($path . $fn .'/');
-				} elseif(isset($extensions[strtolower(getext($fn))]) && $path != '') {
+				} elseif(isset($photoExtensions[strtolower(getext($fn))]) && $path != '') {
 					echo 'found photo: '.$subpath."\n";
 					$photos[$path][] = $fn;
+				} elseif(isset($videoExtensions[strtolower(getext($fn))]) && $path != '') {
+					echo 'found video: '.$subpath."\n";
+					$videos[$path][] = $fn;
 				}
 			}
 		}

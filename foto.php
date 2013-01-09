@@ -15,7 +15,7 @@
 		showTextAsImage('Access denied');
 	}
 
-	if(!$mime = $extensions[getext($row['name'])]) {
+	if(!$mime = $photoExtensions[getext($row['name'])]) {
 		showTextAsImage("Unknown extension");
 	}
 

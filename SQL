@@ -9,6 +9,16 @@ CREATE TABLE `fa_photos` (
 	PRIMARY KEY  (`id`),
 	UNIQUE KEY `path` (`path`,`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+CREATE TABLE `fa_videos` (
+	`id` int(11) NOT NULL auto_increment,
+	`name` varchar(64) NOT NULL,
+	`path` varchar(255) NOT NULL,
+	`visibility` enum('deleted','lost','hidden','leden','world') NOT NULL default 'world',
+	`cached` set('thumb','320p', '640p','invalidated') NOT NULL,
+	`check_tags` tinyint(1) default '0',
+	PRIMARY KEY  (`id`),
+	UNIQUE KEY `path` (`path`,`name`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `fa_albums` (
 	`id` int(11) NOT NULL auto_increment,
 	`name` varchar(64) NOT NULL,

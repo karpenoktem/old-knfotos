@@ -89,16 +89,33 @@
 	}
 
 	/* Extensions */
-	$extensions = array(
-		'gif' => 'gif', 
-		'jpg' => 'jpeg', 
-		'jpeg' => 'jpeg', 
-		'png' => 'png', 
-		'gif' => 'gif', 
+	$photoExtensions = array(
+		'gif'  => 'gif',
+		'jpg'  => 'jpeg',
+		'jpeg' => 'jpeg',
+		'png'  => 'png',
 	);
 	if($imagick) {
-		$extensions['bmp'] = 'bmp';
+		$photoExtensions['bmp'] = 'bmp';
 	}
+
+	$videoExtensions = array(
+		'3gp'  => '3gp',
+		'3g2'  => '3g2',
+		'avi'  => 'avi',
+		'm4v'  => 'm4v',
+		'mkv'  => 'mkv',
+		'mpeg' => 'mp4', // these are all mp4, I think
+		'mpg'  => 'mp4',
+		'mpe'  => 'mp4',
+		'mp4'  => 'mp4',
+		'mov'  => 'mov',
+		'ogg'  => 'ogg',
+		'ogv'  => 'ogg',
+		'webm' => 'webm',
+		'wmv'  => 'wmv',
+		// this should cover most (and should mostly be usable by ffmpeg)
+	);
 
 	/* Functions */
 	function show_template($tpl) {
