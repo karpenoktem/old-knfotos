@@ -30,8 +30,14 @@
 		}
 	}
 
-	if(!$mime = $photoExtensions[getext($row['name'])]) {
-		showTextAsImage("Unknown extension");
+	if(isset($photoExtensions[getext($row['name'])])) {
+		$mime = $photoExtensions[getext($row['name'])];
+	} else {
+		if(isset($videoExtensions[getext($row['name'])])) {
+			$mime = 'jpeg';
+		} else {
+			showTextAsImage("Unknown extension");
+		}
 	}
 
 	$cachepath = $cachedir . $row['path'] . $row['name'] .'_thumb';
