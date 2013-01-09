@@ -4,7 +4,9 @@
 
 
 	/* First, cache all photos (they're probably far quicker) */
-	$res = sql_query("SELECT * FROM fa_photos WHERE ((NOT FIND_IN_SET('thumb', cached) OR NOT FIND_IN_SET('large', cached)) OR FIND_IN_SET('invalidated', cached)) AND visibility IN('hidden', 'leden', 'world') ORDER BY FIND_IN_SET('invalidated', cached), RAND()");
+	echo "Caching photos...\n";
+
+	$res = sql_query("SELECT * FROM fa_photos WHERE type='photo' AND ((NOT FIND_IN_SET('thumb', cached) OR NOT FIND_IN_SET('large', cached)) OR FIND_IN_SET('invalidated', cached)) AND visibility IN('hidden', 'leden', 'world') ORDER BY FIND_IN_SET('invalidated', cached), RAND()");
 	while($row = mysql_fetch_assoc($res)) {
 		echo '==> '. $row['path'] . $row['name'] ."\n";
 		if(!is_dir($cachedir . $row['path'])) {
@@ -46,8 +48,9 @@
 	}
 
 	/* After that, transcode videos (potentially takes a looong time) */
-	require('footer.php');
-	$res = sql_query("SELECT * FROM fa_videos WHERE ((NOT FIND_IN_SET('thumb', cached) OR NOT FIND_IN_SET('360p', cached) OR NOT FIND_IN_SET('720p', cached)) OR FIND_IN_SET('invalidated', cached)) AND visibility IN('hidden', 'leden', 'world') ORDER BY FIND_IN_SET('invalidated', cached), RAND()");
+	echo "Caching/transcoding videos...\n";
+
+	$res = sql_query("SELECT * FROM fa_photos WHERE type='video' AND ((NOT FIND_IN_SET('thumb', cached) OR NOT FIND_IN_SET('360p', cached) OR NOT FIND_IN_SET('720p', cached)) OR FIND_IN_SET('invalidated', cached)) AND visibility IN('hidden', 'leden', 'world') ORDER BY FIND_IN_SET('invalidated', cached), RAND()");
 	$ffmpeg_thumbnail_size = substr($thumbnail_size, 0, 1) == 'x' ? '-1:'.substr($thumbnail_size, 1) : substr($thumbnail_size, 0, -1).':-1';
 	while ($row = mysql_fetch_assoc($res)) {
 		echo '==> '. $row['path'] . $row['name'] ."\n";
@@ -95,10 +98,12 @@
 		}
 
 		echo "===> Updating";
-		sql_query("UPDATE fa_videos SET cached=%s WHERE id=%i",
+		sql_query("UPDATE fa_photos SET cached=%s WHERE id=%i",
 				implode(',', $cached), $row['id']);
 		echo "\n";
 	}
+
+	require('footer.php');
 
 	// transcode one video with ffmpeg
 	function transcode($input, $output, $bitrate, $size) {

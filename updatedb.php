@@ -38,7 +38,7 @@
 	}
 
 	// check each photo
-	$res = sql_query('SELECT name, path, visibility FROM fa_photos');
+	$res = sql_query('SELECT name, path, visibility FROM fa_photos where type="photo"');
 	while($row = mysql_fetch_assoc($res)) {
 		// if the photo in the db isn't in $fotodir anymore, set it to lost
 		if(!isset($photos[$row['path']]) || !in_array($row['name'], $photos[$row['path']])) {
@@ -78,8 +78,9 @@
 			if (!sql_query("INSERT INTO fa_photos (
 					name,
 					path,
-					rotation)
-				VALUES (%s, %s, %i)",
+					rotation,
+					type)
+				VALUES (%s, %s, %i, 'photo')",
 					$photo, $path, $or))
 				die (mysql_error());
 		}
@@ -87,15 +88,15 @@
 
 
 	// check each video
-	$res = sql_query('SELECT name, path, visibility FROM fa_videos');
+	$res = sql_query('SELECT name, path, visibility FROM fa_photos where type="video"');
 	while($row = mysql_fetch_assoc($res)) {
 		// if the photo in the db isn't in $fotodir anymore, set it to lost
 		if(!isset($videos[$row['path']]) || !in_array($row['name'], $videos[$row['path']])) {
-			sql_query("UPDATE fa_videos SET visibility='lost' WHERE name=%s AND path=%s", $row['name'], $row['path']);
+			sql_query("UPDATE fa_photos SET visibility='lost' WHERE name=%s AND path=%s", $row['name'], $row['path']);
 		} else {
 			unset($videos[$row['path']][array_search($row['name'], $videos[$row['path']])]);
 			if($row['visibility'] == 'lost') {
-				sql_query("UPDATE fa_videos SET visibility='hidden' WHERE name=%s AND path=%s", $row['name'], $row['path']);
+				sql_query("UPDATE fa_photos SET visibility='hidden' WHERE name=%s AND path=%s", $row['name'], $row['path']);
 			}
 		}
 	}
@@ -104,10 +105,11 @@
 	// insert remaining videos
 	foreach($videos as $path=>$dirs) {
 		foreach($dirs as $video) {
-			if (!sql_query("INSERT INTO fa_videos (
+			if (!sql_query("INSERT INTO fa_photos (
 					name,
-					path)
-				VALUES (%s, %s)",
+					path,
+					type)
+				VALUES (%s, %s, 'video')",
 					$video, $path))
 				die (mysql_error());
 		}
