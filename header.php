@@ -315,7 +315,7 @@
 		if($flags & UNIT_PHOTO) {
 			$res = sql_query("SELECT * FROM fa_photos WHERE path = %s AND name = %s", $path, $name);
 			if($photo = mysql_fetch_assoc($res)) {
-				$photo['type'] = 'photo';
+				// type already defined: 'photo' or 'video'
 				return $photo;
 			}
 		}

@@ -1,4 +1,5 @@
 <?php
+	// this file is almost the same as foto.php
 	require('header.php');
 
 	if(!isset($_GET['foto'])) {
@@ -17,21 +18,36 @@
 	}
 
 	if(!$mime = $photoExtensions[getext($row['name'])]) {
-		showTextAsImage("Unknown extension");
+		if(isset($videoExtensions[$_GET['codec']])) {
+			$mime = $_GET['codec'];
+		} else {
+			showTextAsImage("Unknown extension");
+		}
 	}
 
-	$cachepath = $cachedir . $row['path'] . $row['name'] .'_large';
+	if ($row['type'] == 'photo') {
+		$path = $cachedir . $row['path'] . $row['name'] .'_large';
+	} else {
+		$path = $cachedir . $row['path'] . $row['name'] .'_'. intval($_GET['res']) .'p.'. $mime;
+	}
 
-	if(!is_file($cachepath)) {
+	if(!is_file($path)) {
 		header('HTTP/1.1 404 Not Found');
 		showTextAsImage("Image not cached", 600);
 	}
-	header('Content-type: image/'. $mime);
-	header('Pragma: public');
-	header('Cache-Control: public');
-	header('Last-Modified: '. gmdate('D, d M Y H:i:s', $fmt = filemtime($cachepath)) .' GMT');
-	header('Expires: '. gmdate('D, d M Y H:i:s', time()+60*60).' GMT');
-	header('Etag: '. md5($cachepath . $fmt));
-	readfile($cachepath);
+	if ($row['type'] == 'photo') {
+		header('Content-type: image/'. $mime);
+		header('Pragma: public');
+		header('Cache-Control: public');
+		header('Last-Modified: '. gmdate('D, d M Y H:i:s', $fmt = filemtime($path)) .' GMT');
+		header('Expires: '. gmdate('D, d M Y H:i:s', time()+60*60).' GMT');
+		header('Etag: '. md5($path . $fmt));
+		readfile($path);
+	} else {
+		// video
+		// This might not work when X-Sendfile is disabled
+		header('Content-Type: video/'. $mime);
+		header('X-Sendfile: '. $path);
+	}
 	require('footer.php');
 ?>

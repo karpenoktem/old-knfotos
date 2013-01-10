@@ -27,6 +27,7 @@
 	}
 
 	$name = $photo['name'];
+	$type = $photo['type'];
 	$foto = $photo['path'] . $photo['name'];
 	$album = $photo['path'];
 	$id = $photo['id'];
@@ -73,6 +74,7 @@
 	template_assign('mode');
 
 	template_assign('name');
+	template_assign('type');
 	template_assign('album');
 	template_assign('parentalbums');
 	template_assign('foto');
