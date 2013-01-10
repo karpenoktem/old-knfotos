@@ -79,8 +79,8 @@
 		if (!in_array('360p', $cached)) {
 			echo "===> 360p\n";
 			foreach (array('mp4', 'webm') as $format) {
-				transcode(escapeshellarg($fotodir . $row['path'] . $row['name']),
-						escapeshellarg($cachedir . $row['path'] . $row['name'] .'_360p.'. $format),
+				transcode($fotodir . $row['path'] . $row['name'],
+						$cachedir . $row['path'] . $row['name'] .'_360p.'. $format,
 						'500k', '360');
 			}
 			$cached[] = '360p';
@@ -90,8 +90,8 @@
 		if (!in_array('720p', $cached)) {
 			echo "===> 720p\n";
 			foreach (array('mp4', 'webm') as $format) {
-				transcode(escapeshellarg($fotodir . $row['path'] . $row['name']),
-						escapeshellarg($cachedir . $row['path'] . $row['name'] .'_720p.'. $format),
+				transcode($fotodir . $row['path'] . $row['name'],
+						$cachedir . $row['path'] . $row['name'] .'_720p.'. $format,
 						'2500k', '720');
 			}
 			$cached[] = '720p';
@@ -107,7 +107,7 @@
 
 	// transcode one video with ffmpeg
 	function transcode($input, $output, $bitrate, $size) {
-		$command = 'ffmpeg -loglevel warning -i '. $input .' -b:v '. $bitrate .' -vf "scale=-1:'. $size .'" -y '. $output;
+		$command = 'ffmpeg -loglevel warning -i '. escapeshellarg($input) .' -b:v '. $bitrate .' -vf "scale=-1:'. $size .'" -y '. escapeshellarg($output);
 		passthru($command, $ret);
 		if($ret != 0) {
 			echo "ERROR while transcoding via $command\n";
