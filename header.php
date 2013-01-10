@@ -259,16 +259,17 @@
 
 		if($tags) {
 			$args = array();
-			$sql = "INSERT INTO fa_tags (photo_id, username) VALUES ";
+			$sql = "INSERT INTO fa_tags (photo_id, username, createdby) VALUES ";
 			$first = false;
 			foreach($tags as $tag) {
 				if(!$first)
 					$first = true;
 				else
 					$sql .= ',';
-				$sql .= "(%i, %s)";
-				$args[]= $id;
-				$args[]= $tag;
+				$sql .= "(%i, %s, %s)";
+				$args[] = $id;
+				$args[] = $tag;
+				$args[] = $_SESSION['user'];
 			}
 			call_user_func_array('sql_query',
 				array_merge(array($sql), $args));
@@ -368,4 +369,43 @@
 		}
 		return (count($usernames) == count(array_intersect($users, $usernames)));
 	}
+
+	/* CsrfToken class */
+	class CsrfToken {
+		private $token;
+
+		function __construct() {
+			if (isset($_COOKIE["csrftoken"])) {
+				$this->token = $_COOKIE["csrftoken"];
+			} else {
+				$this->token = md5(mt_rand());
+				setcookie("csrftoken", $this->token);
+			}
+		}
+
+		public static function check($data=null) {
+			$data = is_null($data) ? $_POST : $data;
+			if (! isset($data['csrftoken'])) return false;
+			if (! isset($_COOKIE['csrftoken'])) return false;
+			return ($data['csrftoken'] == $_COOKIE['csrftoken']);
+		}
+
+		public static function checkOrDie($data=null) {
+			$data = is_null($data) ? $_POST : $data;
+			if (! self::check($data)) {
+				die("CSRF check failed!");
+			}
+		}
+
+		public function get() {
+			return $this->token;
+		}
+
+		public function printField() {
+			echo '<input type="hidden" name="csrftoken" value="' . $this->token . '" />' . "\n";
+		}
+	}
+	$csrfToken = new CsrfToken();
+	template_assign('csrfToken');
+
 ?>

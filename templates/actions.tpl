@@ -2,6 +2,7 @@
 				<legend>Zoeken</legend>
 				<table>
 					<form action=".">
+						<?php $csrfToken->printField() ?>
 						<tr>
 							<th>Album:</th>
 						</tr>
@@ -10,6 +11,7 @@
 						</tr>
 					</form>
 					<form action=".">
+						<?php $csrfToken->printField() ?>
 						<input type="hidden" name="album" value="<?PHP echo isset($album) ? $album : (isset($_GET['album']) ? $_GET['album'] : ''); ?>" />
 						<tr>
 							<th>Lid:</th>
@@ -141,7 +143,7 @@
 						}
 						tags = tags.join(',');
 
-						var query = 'updatePhoto=<?= $id ?>&visibility='+ escape(visibility) +'&rotation='+ escape(rotation) +'&tags='+ escape(tags);
+						var query = 'csrftoken=<?= $csrfToken->get() ?>&updatePhoto=<?= $id ?>&visibility='+ escape(visibility) +'&rotation='+ escape(rotation) +'&tags='+ escape(tags);
 
 						if(andContinue) {
 <?PHP if($next) { ?>
@@ -199,7 +201,7 @@
 							var visibility = gel('f_visibility').value;
 							var humanname = gel('f_humanname').value;
 
-							var query = 'updateAlbum=<?= $id ?>&visibility='+ visibility +'&humanname='+ humanname;
+							var query = 'csrftoken=<?= $csrfToken->get() ?>&updateAlbum=<?= $id ?>&visibility='+ visibility +'&humanname='+ humanname;
 
 							xmlHttp = false;
 							/*@cc_on @*/
