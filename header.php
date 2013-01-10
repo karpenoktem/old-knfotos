@@ -366,6 +366,8 @@
 		$res = $mdb->entities->find(array('types' => 'user'), array('names', 'person.family'));
 		$out = array();
 		foreach($res as $row) {
+			if(!isset($row['names']) or !isset($row['person']))
+				continue;
 			$out[$row['names'][0]] = $row['person']['family'];
 		}
 		ksort($out);
@@ -377,6 +379,8 @@
 		$res = $mdb->entities->find(array('types' => 'user'), array('names'));
 		$users = array();
 		foreach($res as $row) {
+			if(!isset($row['names']))
+				continue;
 			$users[] = $row['names'][0];
 		}
 		return (count($usernames) == count(array_intersect($users, $usernames)));
