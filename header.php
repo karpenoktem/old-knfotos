@@ -100,20 +100,20 @@
 	}
 
 	$videoExtensions = array(
-		'3gp'  => '3gp',
-		'3g2'  => '3g2',
-		'avi'  => 'avi',
-		'm4v'  => 'm4v',
-		'mkv'  => 'mkv',
-		'mpeg' => 'mp4', // these are all mp4, I think
-		'mpg'  => 'mp4',
-		'mpe'  => 'mp4',
+		'3gp'  => '3gpp',
+		'3g2'  => '3gpp2',
+		'avi'  => 'video/x-msvideo',
+		'm4v'  => 'x-m4v',
+		'mkv'  => 'x-matroska',
+		'mpeg' => 'mpeg',
+		'mpg'  => 'mpeg',
+		'mpe'  => 'mpeg',
 		'mp4'  => 'mp4',
-		'mov'  => 'mov',
+		'mov'  => 'quicktime',
 		'ogg'  => 'ogg',
 		'ogv'  => 'ogg',
 		'webm' => 'webm',
-		'wmv'  => 'wmv',
+		'wmv'  => 'x-ms-wmv',
 		// this should cover most (and should mostly be usable by ffmpeg)
 	);
 
