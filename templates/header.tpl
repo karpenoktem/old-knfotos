@@ -15,7 +15,8 @@
 			var preload = 'foto.php?foto=<?= urlencode($next) ?>';
 			var sliding = <?= $sliding ? 'true' : 'false' ?>;
 			var slider_timeout = <?= $foto_slider_timeout ?>;
-			var type    = <?= "'". $type ."'" ?>
+			var type    = '<?= $type ?>';
+			var codecs  = <?= json_encode($video_codecs) ?>;
 		</script>
 		<script type="text/javascript" src="script.js"></script>
 <?PHP if($sliding) { ?>

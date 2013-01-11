@@ -37,15 +37,31 @@
 <?PHP   } else { ?>
 			<video id="video" controls="" autoplay="">
 <?PHP   } ?>
-				<source src="large.php?foto=<?= urlencode($foto) ?>&codec=mp4&res=360p"  type="video/mp4"  data-resolution="360p"/>
-				<source src="large.php?foto=<?= urlencode($foto) ?>&codec=mp4&res=720p"  type="video/mp4"  data-resolution="720p"/>
-				<source src="large.php?foto=<?= urlencode($foto) ?>&codec=webm&res=360p" type="video/webm" data-resolution="360p"/>
-				<source src="large.php?foto=<?= urlencode($foto) ?>&codec=webm&res=720p" type="video/webm" data-resolution="720p"/>
-				Download video in <a href="large.php?foto=<?= urlencode($foto) ?>&codec=mp4&res=360p">lage resolutie (360p, sneller)</a> of <a href="large.php?foto=<?= urlencode($foto) ?>&codec=mp4&res=720p">hoge resolutie (720p, groter/beter)</a>.
+<?PHP   foreach ($video_codecs as $codec) { ?>
+<?PHP     foreach ($video_resolutions as $res) { ?>
+				<source src="large.php?foto=<?= urlencode($foto) ?>&codec=<?= $codec ?>&res=<?= $res ?>"  type="video/<?= $codec ?>"  data-resolution="<?= $res ?>"/>
+<?PHP     } ?>
+<?PHP   } ?>
+				<p>Je browser ondersteund geen html5 video (gebruik <a href="http://windows.microsoft.com/nl-NL/internet-explorer/downloads/ie-9/worldwide-languages">IE9</a>+ of een recente versie van <a href="http://www.mozilla.org/nl/firefox/new/">Firefox</a>, <a href="https://www.google.com/intl/nl/chrome/browser/">Chrome</a>, <a href="http://www.apple.com/safari/">Safari</a> of <a href="http://www.opera.com/">Opera</a>).</p>
+<?PHP   if (count($video_resolutions) == 2 && in_array('mp4', $video_codecs)) { ?>
+				<p>Download video in <a href="large.php?foto=<?= urlencode($foto) ?>&codec=mp4&res=<?= $video_resolutions{0} ?>">lage resolutie (<?= $video_resolutions{0} ?>, sneller)</a> of <a href="large.php?foto=<?= urlencode($foto) ?>&codec=mp4&res=<?= $video_resolutions{1} ?>">hoge resolutie (<?= $video_resolutions{1} ?>, groter/beter)</a>.</p>
+<?PHP   } else { ?>
+				<p>Video beschikbaar in de volgende resoluties (kleiner is sneller te downloaden):</p>
+				<ul>
+<?PHP     foreach ($video_resolutions as $res) { ?>
+					<li><a href="large.php?foto=<?= urlencode($foto) ?>&codec=<?= $video_codecs{0} ?>&res=<?= $res ?>"><?= $res ?></a></li>
+<?PHP     } ?>
+				</ul>
+<?PHP   } ?>
 			</video><br/>
 			<select id="resolution" onchange="updateResolution()" title="Video resolutie">
-					<option selected="">360p</option>
-					<option>720p</option>
+<?PHP   foreach ($video_resolutions as $res) { ?>
+<?PHP     if ($res == $video_resolutions{0}) { ?>
+					<option selected=""><?= $res ?></option>
+<?PHP     } else { ?>
+					<option><?= $res ?></option>
+<?PHP     } ?>
+<?PHP   } ?>
 			</select>
 <?PHP } ?>
 			<div class="nav">

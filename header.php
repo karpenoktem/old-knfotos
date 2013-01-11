@@ -19,7 +19,7 @@
 	require('config.php');
 
 	/* Check the config */
-	if(!isset($fotodir, $cachedir, $domain, $absolute_url_path, $thumbs_per_row, $rows_of_thumbs, $imagick, $thumbnail_size, $foto_slider, $db_host, $db_user, $db_pass, $db_db, $log_queries)) {
+	if(!isset($fotodir, $cachedir, $domain, $absolute_url_path, $thumbs_per_row, $rows_of_thumbs, $foto_slider, $imagick, $thumbnail_size, $ffmpeg, $video_codecs, $video_resolutions, $db_host, $db_user, $db_pass, $db_db, $log_queries)) {
 		die("Missing settings");
 	}
 	if($log_queries)
@@ -86,6 +86,9 @@
 			template_assign('foto_slider_preload');
 			template_assign('foto_slider_timeout');
 		}
+
+		template_assign('video_codecs');
+		template_assign('video_resolutions');
 	}
 
 	/* Extensions */

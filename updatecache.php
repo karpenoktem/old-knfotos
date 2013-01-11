@@ -48,9 +48,13 @@
 	}
 
 	/* After that, transcode videos (potentially takes a looong time) */
-	echo "Caching/transcoding videos...\n";
+	echo "\nCaching/transcoding videos...\n";
 
-	$res = sql_query("SELECT * FROM fa_photos WHERE type='video' AND ((NOT FIND_IN_SET('thumb', cached) OR NOT FIND_IN_SET('360p', cached) OR NOT FIND_IN_SET('720p', cached)) OR FIND_IN_SET('invalidated', cached)) AND visibility IN('hidden', 'leden', 'world') ORDER BY FIND_IN_SET('invalidated', cached), RAND()");
+	$resolution_constraints_sql = '';
+	foreach ($video_resolutions as $res) {
+		$resolution_constraints_sql .=  " OR NOT FIND_IN_SET('$res', cached)";
+	}
+	$res = sql_query("SELECT * FROM fa_photos WHERE type='video' AND ((NOT FIND_IN_SET('thumb', cached)$resolution_constraints_sql) OR FIND_IN_SET('invalidated', cached)) AND visibility IN('hidden', 'leden', 'world') ORDER BY FIND_IN_SET('invalidated', cached), RAND()");
 	$ffmpeg_thumbnail_size = substr($thumbnail_size, 0, 1) == 'x' ? '-1:'.substr($thumbnail_size, 1) : substr($thumbnail_size, 0, -1).':-1';
 	while ($row = mysql_fetch_assoc($res)) {
 		echo '==> '. $row['path'] . $row['name'] ."\n";
@@ -65,7 +69,7 @@
 		// extract poster frame from video and resize
 		if(!in_array('thumb', $cached)) {
 			echo "===> Thumbnail\n";
-			$command = 'ffmpeg -loglevel warning -i ' . escapeshellarg($fotodir . $row['path'] . $row['name']) . ' -ss 00:00:00.50 -vf "scale=' . $ffmpeg_thumbnail_size . '" -vcodec mjpeg -vframes 1 -f image2 ' . escapeshellarg($cachedir . $row['path'] . $row['name'] .'_thumb');
+			$command = $ffmpeg .' -i ' . escapeshellarg($fotodir . $row['path'] . $row['name']) . ' -ss 00:00:00.50 -vf "scale=' . $ffmpeg_thumbnail_size . '" -vcodec mjpeg -vframes 1 -f image2 ' . escapeshellarg($cachedir . $row['path'] . $row['name'] .'_thumb');
 			passthru($command, $ret);
 			if($ret != 0) {
 				echo "ERROR while creating thumbnail via $command\n";
@@ -75,26 +79,17 @@
 			$cached[] = 'thumb';
 		}
 
-		// transcode 360p version if necessary
-		if (!in_array('360p', $cached)) {
-			echo "===> 360p\n";
-			foreach (array('mp4', 'webm') as $format) {
-				transcode($fotodir . $row['path'] . $row['name'],
-						$cachedir . $row['path'] . $row['name'] .'_360p.'. $format,
-						'500k', '360');
+		// transcode necessary resolutions
+		foreach ($video_resolutions as $resolution) {
+			if (!in_array($resolution, $cached)) {
+				echo "===> $resolution\n";
+				foreach ($video_codecs as $format) {
+					transcode($fotodir . $row['path'] . $row['name'],
+							$cachedir . $row['path'] . $row['name'] ."_$resolution.". $format,
+							'500k', intval($resolution));
+				}
+				$cached[] = $resolution;
 			}
-			$cached[] = '360p';
-		}
-
-		// transcode 720p version if necessary
-		if (!in_array('720p', $cached)) {
-			echo "===> 720p\n";
-			foreach (array('mp4', 'webm') as $format) {
-				transcode($fotodir . $row['path'] . $row['name'],
-						$cachedir . $row['path'] . $row['name'] .'_720p.'. $format,
-						'2500k', '720');
-			}
-			$cached[] = '720p';
 		}
 
 		echo "===> Updating";
@@ -107,7 +102,8 @@
 
 	// transcode one video with ffmpeg
 	function transcode($input, $output, $bitrate, $size) {
-		$command = 'ffmpeg -loglevel warning -i '. escapeshellarg($input) .' -b:v '. $bitrate .' -vf "scale=-1:'. $size .'" -y '. escapeshellarg($output);
+		global $ffmpeg;
+		$command = $ffmpeg .' -i '. escapeshellarg($input) .' -b:v '. $bitrate .' -vf "scale=-1:'. $size .'" -y '. escapeshellarg($output);
 		passthru($command, $ret);
 		if($ret != 0) {
 			echo "ERROR while transcoding via $command\n";

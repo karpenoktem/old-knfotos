@@ -11,18 +11,27 @@ function slider_preload() {
 	document.body.appendChild(el);
 }
 
-// toggle between 360p and 720p videos
+// apply change in resolution to <video>
 function updateResolution () {
 	var resolution = document.getElementById('resolution').value;
 	localStorage.videoResolution = resolution;
 	var video      = document.getElementById('video');
-	var format     = video.canPlayType('video/mp4') ? 'mp4' : 'webm';
+	var codec = null;
+	for (var i=0; i<codecs.length; i++) {
+		if (video.canPlayType('video/'+codecs[i])) {
+			codec = codecs[i];
+		}
+	}
+	if (!codec) {
+		// problem! Just choose the first. It probably won't play anyway.
+		codec = codecs[0];
+	}
 	// workaround for bug in Chrome on Linux (mp4 doesn't play but is still advertized to play)
-	if (video.canPlayType('video/webm') && navigator.userAgent.indexOf('Linux') && navigator.userAgent.indexOf('Chrome')) {
-		format = 'webm';
+	if (video.canPlayType('video/webm') && navigator.userAgent.indexOf('Linux') && navigator.userAgent.indexOf('Chrome') && codecs.indexOf('webm') != -1) {
+		codec = 'webm';
 	}
 	// all browsers supporting <video> support querySelector
-	var src = document.querySelector('source[type="video/'+format+'"][data-resolution="'+resolution+'"]').src;
+	var src = document.querySelector('source[type="video/'+codec+'"][data-resolution="'+resolution+'"]').src;
 	var position = video.currentTime;
 	var playing  = !video.paused;
 	video.src = src;
