@@ -6,9 +6,7 @@
 
 	$path = $fotodir . $media['path'] . $media['name'];
 
-	// send real filename instead of 'foto.php'
-	header('Content-disposition: inline; filename='. $media['name']);
-	output($path);
+	output($path, $media['name']);
 
 	require('footer.php');
 ?>

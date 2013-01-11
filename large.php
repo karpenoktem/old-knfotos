@@ -13,7 +13,7 @@
 		$path = $cachedir . $media['path'] . $media['name'] .'_'. intval($_GET['res']) .'p.'. $mime;
 	}
 
-	output($path);
+	output($path, $media['name']);
 
 	require('footer.php');
 ?>
