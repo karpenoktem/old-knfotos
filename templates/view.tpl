@@ -42,7 +42,7 @@
 				<source src="large.php?foto=<?= urlencode($foto) ?>&codec=<?= $codec ?>&res=<?= $res ?>"  type="video/<?= $codec ?>"  data-resolution="<?= $res ?>"/>
 <?PHP     } ?>
 <?PHP   } ?>
-				<p>Je browser ondersteund geen html5 video (gebruik <a href="http://windows.microsoft.com/nl-NL/internet-explorer/downloads/ie-9/worldwide-languages">IE9</a>+ of een recente versie van <a href="http://www.mozilla.org/nl/firefox/new/">Firefox</a>, <a href="https://www.google.com/intl/nl/chrome/browser/">Chrome</a>, <a href="http://www.apple.com/safari/">Safari</a> of <a href="http://www.opera.com/">Opera</a>). Toch willen we je niet in de steek laten en proberen we hieronder de video af te spelen.</p>
+				<p>Je browser ondersteunt geen html5 video (gebruik <a href="http://windows.microsoft.com/nl-NL/internet-explorer/downloads/ie-9/worldwide-languages">IE9</a>+ of een recente versie van <a href="http://www.mozilla.org/nl/firefox/new/">Firefox</a>, <a href="https://www.google.com/intl/nl/chrome/browser/">Chrome</a>, <a href="http://www.apple.com/safari/">Safari</a> of <a href="http://www.opera.com/">Opera</a>). Toch willen we je niet in de steek laten en proberen we hieronder de video af te spelen.</p>
 <?PHP   if (count($video_resolutions) == 2 && in_array('mp4', $video_codecs)) { ?>
 				<p>Download video in <a href="large.php?foto=<?= urlencode($foto) ?>&codec=mp4&res=<?= $video_resolutions{0} ?>">lage resolutie (<?= $video_resolutions{0} ?>, sneller)</a> of <a href="large.php?foto=<?= urlencode($foto) ?>&codec=mp4&res=<?= $video_resolutions{1} ?>">hoge resolutie (<?= $video_resolutions{1} ?>, groter/beter)</a>.</p>
 <?PHP   } else { ?>
