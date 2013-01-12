@@ -1,11 +1,14 @@
 <?php
 	$cli_mode = true;
 	require('header.php');
+	require('dbutils.php');
 
 	/* This script updates the database with photos in the $fotodir
 	   It sets old albums/photos to lost, sets re-found albums/photos to hidden
 	   and inserts new albums/photos with visibility hidden.
 	 */
+
+	$lock = lock_db();
 
 	$albums = array();
 	$photos = array();
@@ -114,6 +117,8 @@
 				die (mysql_error());
 		}
 	}
+
+	unlock_db($lock);
 
 	require('footer.php');
 

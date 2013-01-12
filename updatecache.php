@@ -1,7 +1,9 @@
 <?php
 	$cli_mode = true;
 	require('header.php');
+	require('dbutils.php');
 
+	$lock = lock_db();
 
 	/* First, cache all photos (they're probably far quicker) */
 	echo "Caching photos...\n";
@@ -97,6 +99,9 @@
 				implode(',', $cached), $row['id']);
 		echo "\n";
 	}
+
+	// not really needed when run from the command line
+	unlock_db($lock);
 
 	require('footer.php');
 
