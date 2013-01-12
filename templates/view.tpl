@@ -31,15 +31,15 @@
 			<img class="large" src="large.php?foto=<?= urlencode($foto) ?>">
 <?PHP } ?>
 			<div class="nav">
-				<a href="foto.php?foto=<?= urlencode($foto) ?>">Direct link</a> -
+				<a href="foto.php?foto=<?= urlencode($foto) ?>">Direct link</a>
 <?PHP if($foto_slider) { ?>
 <?PHP if($sliding) { ?>
-				<a href="view.php?foto=<?= urlencode($foto) ?>">Stop slideshow</a>
+				- <a href="view.php?foto=<?= urlencode($foto) ?>">Stop slideshow</a>
 <?PHP } else { ?>
 <?PHP if($next) { ?>
-				<a href="view.php?slide&foto=<?= urlencode($foto) ?>">Start slideshow</a>
-<?PHP } else { ?>
-				<a href="view.php?slide&foto=<?= urlencode($first) ?>">Start slideshow</a>
+				- <a href="view.php?slide&foto=<?= urlencode($foto) ?>">Start slideshow</a>
+<?PHP } else if ($prev) { ?>
+				- <a href="view.php?slide&foto=<?= urlencode($first) ?>">Start slideshow</a>
 <?PHP } ?>
 <?PHP } ?>
 <?PHP } ?>
