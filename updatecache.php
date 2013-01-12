@@ -55,7 +55,9 @@
 
 	$resolution_constraints_sql = '';
 	foreach ($video_resolutions as $res) {
-		$resolution_constraints_sql .=  " OR NOT FIND_IN_SET('$res', cached)";
+		foreach ($video_codecs as $codec) {
+			$resolution_constraints_sql .=  " OR NOT FIND_IN_SET('$codec-$res', cached)";
+		}
 	}
 	$res = sql_query("SELECT * FROM fa_photos WHERE type='video' AND ((NOT FIND_IN_SET('thumb', cached)$resolution_constraints_sql) OR FIND_IN_SET('invalidated', cached)) AND visibility IN('hidden', 'leden', 'world') ORDER BY FIND_IN_SET('invalidated', cached), RAND()");
 	$ffmpeg_thumbnail_size = substr($thumbnail_size, 0, 1) == 'x' ? '-1:'.substr($thumbnail_size, 1) : substr($thumbnail_size, 0, -1).':-1';
@@ -84,14 +86,14 @@
 
 		// transcode necessary resolutions
 		foreach ($video_resolutions as $resolution) {
-			if (!in_array($resolution, $cached)) {
-				echo "===> $resolution\n";
-				foreach ($video_codecs as $format) {
-					transcode($fotodir . $row['path'] . $row['name'],
-							$cachedir . $row['path'] . $row['name'] ."_$resolution.". $format,
-							'500k', intval($resolution));
+			foreach ($video_codecs as $format) {
+				if (!in_array($resolution, $cached)) {
+					echo "===> $format-$resolution\n";
+						transcode($fotodir . $row['path'] . $row['name'],
+								$cachedir . $row['path'] . $row['name'] ."_$resolution.". $format,
+								'500k', intval($resolution));
+					$cached[] = $format .'-'. $resolution;
 				}
-				$cached[] = $resolution;
 			}
 		}
 
