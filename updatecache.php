@@ -3,6 +3,10 @@
 	require('header.php');
 	require('dbutils.php');
 
+	/* This script resizes photos and transcodes videos and stores them in
+	   the cache directory. This should be run after updatedb.php
+	 */
+
 	// warning: when not run from the CLI, the lock may remain in case of errors.
 	$lock = lock_db();
 
@@ -56,7 +60,7 @@
 	$resolution_constraints_sql = '';
 	foreach ($video_resolutions as $res) {
 		foreach ($video_codecs as $codec) {
-			$resolution_constraints_sql .=  " OR NOT FIND_IN_SET('$codec-$res', cached)";
+			$resolution_constraints_sql .=  " OR NOT FIND_IN_SET('{$codec}_$res', cached)";
 		}
 	}
 	$res = sql_query("SELECT * FROM fa_photos WHERE type='video' AND ((NOT FIND_IN_SET('thumb', cached)$resolution_constraints_sql) OR FIND_IN_SET('invalidated', cached)) AND visibility IN('hidden', 'leden', 'world') ORDER BY FIND_IN_SET('invalidated', cached), RAND()");
@@ -87,12 +91,13 @@
 		// transcode necessary resolutions
 		foreach ($video_resolutions as $resolution) {
 			foreach ($video_codecs as $format) {
-				if (!in_array($resolution, $cached)) {
-					echo "===> $format-$resolution\n";
+				$cache_type = "{$format}_$resolution";
+				if (!in_array($cache_type, $cached)) {
+					echo "===> $cache_type\n";
 						transcode($fotodir . $row['path'] . $row['name'],
 								$cachedir . $row['path'] . $row['name'] ."_$resolution.". $format,
 								'500k', intval($resolution));
-					$cached[] = $format .'-'. $resolution;
+					$cached[] = $cache_type;
 				}
 			}
 		}
