@@ -120,7 +120,7 @@
 		return strtolower(array_pop($ex));
 	}
 
-	function showTextAsImage($str, $width = NULL, $height = NULL) { // XXX $width
+	function showTextAsImage($str, $width = NULL, $height = NULL) {
 		global $thumbnail_size;
 		if ($width === NULL) {
 			$parts = explode('x', $thumbnail_size);
