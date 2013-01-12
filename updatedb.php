@@ -8,6 +8,7 @@
 	   and inserts new albums/photos with visibility hidden.
 	 */
 
+	// warning: when not run from the CLI, the lock may remain in case of errors.
 	$lock = lock_db();
 
 	$albums = array();

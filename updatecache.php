@@ -3,6 +3,7 @@
 	require('header.php');
 	require('dbutils.php');
 
+	// warning: when not run from the CLI, the lock may remain in case of errors.
 	$lock = lock_db();
 
 	/* First, cache all photos (they're probably far quicker) */

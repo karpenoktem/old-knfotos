@@ -1,6 +1,10 @@
 <?php
 
 	// lock the database/cache for write operations
+	// WARNING: when this is used within a server (non-CLI), the lock will remain
+	// when the PHP script has finished. When run from the command-line, the locks
+	// will be relased by the OS (at least, Linux). See:
+	// http://stackoverflow.com/questions/12651068/release-of-flock-in-case-of-errors
 	function lock_db () {
 		global $cachedir;
 		// provide a locking mechanism to prevent two processes from simultaneously running
