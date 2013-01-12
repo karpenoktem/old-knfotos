@@ -126,7 +126,6 @@
 	/* This recursively scans the $fotodir and stores the results in $albums and $photos */
 	function scan_gallery($path) {
 		global $fotodir, $albums, $photos, $videos, $photoExtensions, $videoExtensions;
-		echo 'scanning '.$path."\n";
 
 		foreach(scandir($fotodir . $path) as $fn) {
 			if($fn[0] == '.') {
@@ -138,7 +137,6 @@
 					$albums[$path][] = $fn;
 					scan_gallery($path . $fn .'/');
 				} elseif(isset($photoExtensions[strtolower(getext($fn))]) && $path != '') {
-					echo 'found photo: '.$subpath."\n";
 					$photos[$path][] = $fn;
 				} elseif(isset($videoExtensions[strtolower(getext($fn))]) && $path != '') {
 					echo 'found video: '.$subpath."\n";
