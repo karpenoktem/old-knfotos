@@ -120,7 +120,17 @@
 		return strtolower(array_pop($ex));
 	}
 
-	function showTextAsImage($str, $width = 100, $height = NULL) { // XXX $width
+	function showTextAsImage($str, $width = NULL, $height = NULL) { // XXX $width
+		global $thumbnail_size;
+		if ($width === NULL) {
+			$parts = explode('x', $thumbnail_size);
+			if (!$parts[0]) {
+				$width = 100;
+			} else {
+				$width = intval($parts[0]);
+			}
+		}
+
 		$fid = 3;
 		$charsPerLine = floor($width / imagefontwidth($fid));
 		$lines = explode("\n", wordwrap($str, $charsPerLine));
