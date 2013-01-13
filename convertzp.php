@@ -1,4 +1,7 @@
 <?php
+/* This file was only needed to import data from Zen Photo.
+   So it can be ignored.
+ */
 	$cli_mode = true;
 	require('header.php');
 
