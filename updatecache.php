@@ -115,7 +115,7 @@
 	function transcode($input, $output, $bitrate, $size) {
 		global $ffmpeg;
 		// FUTURE TODO: remove '-strict experimental' (this is not needed in at least ffmpeg 1.1)
-		$command = $ffmpeg .' -i '. escapeshellarg($input) .' -strict experimental -b:v '. $bitrate .' -vf "scale=-1:'. $size .'" -y '. escapeshellarg($output);
+		$command = $ffmpeg .' -i '. escapeshellarg($input) .' -strict experimental -ab 128k -b:v '. $bitrate .' -vf "scale=-1:'. $size .'" -y '. escapeshellarg($output);
 		passthru($command, $ret);
 		if($ret != 0) {
 			echo "ERROR while transcoding via $command\n";
