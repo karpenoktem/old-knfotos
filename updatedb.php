@@ -139,7 +139,6 @@
 				} elseif(isset($photoExtensions[strtolower(getext($fn))]) && $path != '') {
 					$photos[$path][] = $fn;
 				} elseif(isset($videoExtensions[strtolower(getext($fn))]) && $path != '') {
-					echo 'found video: '.$subpath."\n";
 					$videos[$path][] = $fn;
 				}
 			}

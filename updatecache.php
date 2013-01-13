@@ -11,7 +11,6 @@
 	$lock = lock_db();
 
 	/* First, cache all photos (they're probably far quicker) */
-	echo "Caching photos...\n";
 
 	$res = sql_query("SELECT * FROM fa_photos WHERE type='photo' AND ((NOT FIND_IN_SET('thumb', cached) OR NOT FIND_IN_SET('large', cached)) OR FIND_IN_SET('invalidated', cached)) AND visibility IN('hidden', 'leden', 'world') ORDER BY FIND_IN_SET('invalidated', cached), RAND()");
 	while($row = mysql_fetch_assoc($res)) {
@@ -55,7 +54,6 @@
 	}
 
 	/* After that, transcode videos (potentially takes a looong time) */
-	echo "\nCaching/transcoding videos...\n";
 
 	$resolution_constraints_sql = '';
 	foreach ($video_resolutions as $res) {
