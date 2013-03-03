@@ -11,10 +11,14 @@
 		<link href="http://www.karpenoktem.nl/base/styles/common/" rel="stylesheet" type="text/css" />
 		<link type="text/css" rel="stylesheet" href="style.css" />
 		<script type="text/javascript">
-			var next    = "view.php?slide&foto=<?= urlencode($next) ?>";
-			var preload = 'foto.php?foto=<?= urlencode($next) ?>';
 			var sliding = <?= $sliding ? 'true' : 'false' ?>;
+<?php if ($sliding) { ?>
+			var next    = "view.php?slide&foto=<?= urlencode($next) ?>";
+<?php   if ($foto_slider_preload) { ?>
+			var preload = 'foto.php?foto=<?= urlencode($next) ?>';
+<?php   } ?>
 			var slider_timeout = <?= $foto_slider_timeout ?>;
+<?php } ?>
 			var type    = '<?= $type ?>';
 			var codecs  = <?= json_encode($video_codecs) ?>;
 		</script>

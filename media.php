@@ -38,7 +38,7 @@
 
 		if ($name)
 			// send real filename instead of php file name
-			header('Content-disposition: inline; filename='. $media['name']);
+			header('Content-disposition: inline; filename='. $name);
 		header('Content-type: '. $mime);
 		header('X-Sendfile: '. $path);
 	}

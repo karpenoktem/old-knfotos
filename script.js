@@ -46,7 +46,7 @@ if (type == 'photo') {
 	if (sliding) {
 		setTimeout('slider_next()', slider_timeout*1000);
 	}
-} else {
+} else if (type == 'video') {
 	window.addEventListener('DOMContentLoaded', function () {
 		var video = document.getElementById('video');
 		if (document.getElementById('resolution').value != localStorage.videoResolution) {
