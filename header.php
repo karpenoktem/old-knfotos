@@ -168,12 +168,12 @@
 		session_name('sessid-knalbum');
 		session_start();
 		if($_SERVER['HTTP_HOST'] != $domain) {
-			header('Location: http://'. $domain . $_SERVER['REQUEST_URI']);
+			header('Location: https://'. $domain . $_SERVER['REQUEST_URI']);
 			exit;
 		}
 		if(isset($_GET['user'], $_GET['token'])) {
-			$params = array('user' => $_GET['user'], 'validate' => $_GET['token'], 'url' => 'http://'. $domain . $absolute_url_path);
-			$ch = curl_init('http://www.karpenoktem.nl/accounts/rauth/?'. http_build_query($params));
+			$params = array('user' => $_GET['user'], 'validate' => $_GET['token'], 'url' => 'https://'. $domain . $absolute_url_path);
+			$ch = curl_init('https://www.karpenoktem.nl/accounts/rauth/?'. http_build_query($params));
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			$res = curl_exec($ch);
 			curl_close($ch);
@@ -196,7 +196,7 @@
 			$params = $_GET;
 			unset($params['login']);
 			$_SESSION['entry_url'] = $_SERVER['SCRIPT_NAME'] .'?'. http_build_query($params);
-			header('Location: http://www.karpenoktem.nl/accounts/rauth/?url=http://'. $domain . $absolute_url_path);
+			header('Location: https://www.karpenoktem.nl/accounts/rauth/?url=https://'. $domain . $absolute_url_path);
 			exit;
 		} elseif(isset($_GET['logout'])) {
 			unset($_SESSION['user'], $_SESSION['isAdmin']);
