@@ -201,7 +201,8 @@
 			exit;
 		} elseif(isset($_GET['logout'])) {
 			unset($_SESSION['user'], $_SESSION['isAdmin']);
-			header('Location: '. $_SERVER['REQUEST_URI']);
+			unset($_GET['logout']);
+			header('Location: '. uri('?'. http_build_query($_GET)));
 			exit;
 		}
 	}
