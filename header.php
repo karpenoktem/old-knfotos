@@ -86,6 +86,10 @@
 			template_assign('foto_slider_preload');
 			template_assign('foto_slider_timeout');
 		}
+
+		if (isset($ga_trackerId)) {
+			template_assign('ga_trackerId');
+		}
 	}
 
 	/* Extensions */
