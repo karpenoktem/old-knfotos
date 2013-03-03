@@ -16,14 +16,16 @@
 				&copy;2009-2011, Karpe Noktem (<a href="https://github.com/karpenoktem/knfotos">broncode</a>)
 			</div>
 		</div>
+<?php if (isset($ga_trackerId)) { ?>
 		<script type="text/javascript">
 		var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
 		document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
 		</script>
 		<script type="text/javascript">
 		try {
-			var pageTracker = _gat._getTracker("UA-11922614-1");
+			var pageTracker = _gat._getTracker("<?= $ga_trackerId ?>");
 			pageTracker._trackPageview();
 		} catch(err) {}</script>
+<?php } ?>
 	</body>
 </html>
