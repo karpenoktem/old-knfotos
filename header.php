@@ -76,6 +76,7 @@
 		}
 
 		template_assign('absolute_url_path');
+		template_assign('domain');
 		template_assign('thumbs_per_row');
 		template_assign('rows_of_thumbs');
 
@@ -172,8 +173,8 @@
 			exit;
 		}
 		if(isset($_GET['user'], $_GET['token'])) {
-			$params = array('user' => $_GET['user'], 'validate' => $_GET['token'], 'url' => 'https://'. $domain . $absolute_url_path);
-			$ch = curl_init('https://www.karpenoktem.nl/accounts/rauth/?'. http_build_query($params));
+			$params = array('user' => $_GET['user'], 'validate' => $_GET['token'], 'url' => uri(''));
+			$ch = curl_init(base_uri('/accounts/rauth/?'. http_build_query($params)));
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			$res = curl_exec($ch);
 			curl_close($ch);
@@ -196,7 +197,7 @@
 			$params = $_GET;
 			unset($params['login']);
 			$_SESSION['entry_url'] = $_SERVER['SCRIPT_NAME'] .'?'. http_build_query($params);
-			header('Location: https://www.karpenoktem.nl/accounts/rauth/?url=https://'. $domain . $absolute_url_path);
+			header('Location: '. base_uri('/accounts/rauth/?url='.uri('')));
 			exit;
 		} elseif(isset($_GET['logout'])) {
 			unset($_SESSION['user'], $_SESSION['isAdmin']);
@@ -387,5 +388,15 @@
 			$users[] = $row['names'][0];
 		}
 		return (count($usernames) == count(array_intersect($users, $usernames)));
+	}
+
+	function uri($ending) {
+		global $domain, $absolute_url_path;
+		return (isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $domain . $absolute_url_path . $ending;
+	}
+
+	function base_uri($ending) {
+		global $domain;
+		return (isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $domain . $ending;
 	}
 ?>
