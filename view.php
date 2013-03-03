@@ -52,7 +52,7 @@
 	$res = sql_query("SELECT name FROM fa_photos WHERE path=%s AND visibility IN (%S) ORDER BY name", $album, getVisibleVisibilities());
 	while($row = mysql_fetch_assoc($res)) {
 		if(!$first) {
-			$first = $album . $photo['name'];
+			$first = $album . $row['name'];
 		}
 		if($photo['name'] == $row['name']) {
 			$next = NULL;
