@@ -19,7 +19,7 @@
 	require('config.php');
 
 	/* Check the config */
-	if(!isset($fotodir, $cachedir, $domain, $absolute_url_path, $thumbs_per_row, $rows_of_thumbs, $imagick, $thumbnail_size, $foto_slider, $db_host, $db_user, $db_pass, $db_db, $log_queries)) {
+	if(!isset($fotodir, $cachedir, $domain, $absolute_url_path, $thumbs_per_row, $rows_of_thumbs, $foto_slider, $imagick, $thumbnail_size, $ffmpeg, $video_codecs, $video_resolutions, $db_host, $db_user, $db_pass, $db_db, $log_queries)) {
 		die("Missing settings");
 	}
 	if($log_queries)
@@ -76,6 +76,7 @@
 		}
 
 		template_assign('absolute_url_path');
+		template_assign('domain');
 		template_assign('thumbs_per_row');
 		template_assign('rows_of_thumbs');
 
@@ -86,19 +87,39 @@
 			template_assign('foto_slider_preload');
 			template_assign('foto_slider_timeout');
 		}
+
+		template_assign('video_codecs');
+		template_assign('video_resolutions');
 	}
 
 	/* Extensions */
-	$extensions = array(
-		'gif' => 'gif', 
-		'jpg' => 'jpeg', 
-		'jpeg' => 'jpeg', 
-		'png' => 'png', 
-		'gif' => 'gif', 
+	$photoExtensions = array(
+		'gif'  => 'gif',
+		'jpg'  => 'jpeg',
+		'jpeg' => 'jpeg',
+		'png'  => 'png',
 	);
 	if($imagick) {
-		$extensions['bmp'] = 'bmp';
+		$photoExtensions['bmp'] = 'bmp';
 	}
+
+	$videoExtensions = array(
+		'3gp'  => '3gpp',
+		'3g2'  => '3gpp2',
+		'avi'  => 'video/x-msvideo',
+		'm4v'  => 'x-m4v',
+		'mkv'  => 'x-matroska',
+		'mpeg' => 'mpeg',
+		'mpg'  => 'mpeg',
+		'mpe'  => 'mpeg',
+		'mp4'  => 'mp4',
+		'mov'  => 'quicktime',
+		'ogg'  => 'ogg',
+		'ogv'  => 'ogg',
+		'webm' => 'webm',
+		'wmv'  => 'x-ms-wmv',
+		// this should cover most (and should mostly be usable by ffmpeg)
+	);
 
 	/* Functions */
 	function show_template($tpl) {
@@ -152,8 +173,8 @@
 			exit;
 		}
 		if(isset($_GET['user'], $_GET['token'])) {
-			$params = array('user' => $_GET['user'], 'validate' => $_GET['token'], 'url' => 'https://'. $domain . $absolute_url_path);
-			$ch = curl_init('https://www.karpenoktem.nl/accounts/rauth/?'. http_build_query($params));
+			$params = array('user' => $_GET['user'], 'validate' => $_GET['token'], 'url' => uri(''));
+			$ch = curl_init(base_uri('/accounts/rauth/?'. http_build_query($params)));
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			$res = curl_exec($ch);
 			curl_close($ch);
@@ -176,11 +197,12 @@
 			$params = $_GET;
 			unset($params['login']);
 			$_SESSION['entry_url'] = $_SERVER['SCRIPT_NAME'] .'?'. http_build_query($params);
-			header('Location: https://www.karpenoktem.nl/accounts/rauth/?url=https://'. $domain . $absolute_url_path);
+			header('Location: '. base_uri('/accounts/rauth/?url='.uri('')));
 			exit;
 		} elseif(isset($_GET['logout'])) {
 			unset($_SESSION['user'], $_SESSION['isAdmin']);
-			header('Location: '. $_SERVER['REQUEST_URI']);
+			unset($_GET['logout']);
+			header('Location: '. uri('?'. http_build_query($_GET)));
 			exit;
 		}
 	}
@@ -298,7 +320,7 @@
 		if($flags & UNIT_PHOTO) {
 			$res = sql_query("SELECT * FROM fa_photos WHERE path = %s AND name = %s", $path, $name);
 			if($photo = mysql_fetch_assoc($res)) {
-				$photo['type'] = 'photo';
+				// type already defined: 'photo' or 'video'
 				return $photo;
 			}
 		}
@@ -367,5 +389,15 @@
 			$users[] = $row['names'][0];
 		}
 		return (count($usernames) == count(array_intersect($users, $usernames)));
+	}
+
+	function uri($ending) {
+		global $domain, $absolute_url_path;
+		return (isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $domain . $absolute_url_path . $ending;
+	}
+
+	function base_uri($ending) {
+		global $domain;
+		return (isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $domain . $ending;
 	}
 ?>

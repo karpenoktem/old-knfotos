@@ -5,20 +5,34 @@
 	$domain = 'karpenoktem.nl';
 	$absolute_url_path = '/fotos2/';
 
+	// thumbs layout
 	$thumbs_per_row = 4;
 	$rows_of_thumbs = 2;
 
+	// foto slider
 	$foto_slider = true;
 	$foto_slider_preload = true;
 	$foto_slider_timeout = 5;
 
+	// image resize
 	$imagick = '/usr/local/bin/convert'; // or false to use GD
 	$thumbnail_size = '100x';
 	$large_size = '1024x';
 
+	// video transcoding
+	// ffmpeg command (may have extra options)
+	$ffmpeg = '/usr/local/bin/ffmpeg -loglevel warning';
+	// put preferred codec first
+	// note that mp4 (h264) may have hardware acceleration on certain devices
+	$video_codecs = array('mp4', 'webm');
+	// when changing these don't forget to update the database table!
+	// always put lower resolution first!
+	// and put them in the form of '360p', '480p', '720p', '1080p' etc.
+	$video_resolutions = array('360p', '720p');
+
 	$db_host = 'localhost';
 	$db_user = 'knfotos';
-	$db_db = 'knfotos';
+	$db_db   = 'knfotos';
 	$db_pass = 'abc';
 
 	$mongo_host = 'localhost';

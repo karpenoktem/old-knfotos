@@ -20,10 +20,15 @@
 					</form>
 				</table>
 			</fieldset>
+<?php if ($album) { ?>
+			<a href="zip.php?album=<?= htmlentities($album) ?>">Download album als zip</a> | 
+<?php } ?>
 <?PHP if(!isLid()) { ?>
-			<a href="<?= $login_url ?>">Inloggen</a>
-<?PHP } elseif(isAdmin()) { ?>
-<?PHP if($mode == 'view') { ?>
+			 <a href="<?= $login_url ?>">Inloggen</a>
+<?PHP } else { ?>
+			<a href="?logout">Uitloggen</a>
+<?PHP   if(isAdmin()) { ?>
+<?PHP     if($mode == 'view') { ?>
 			<form>
 				<fieldset>
 					<legend>Tags</legend>
@@ -144,12 +149,12 @@
 						var query = 'updatePhoto=<?= $id ?>&visibility='+ escape(visibility) +'&rotation='+ escape(rotation) +'&tags='+ escape(tags);
 
 						if(andContinue) {
-<?PHP if($next) { ?>
+<?PHP       if($next) { ?>
 							location.href = 'view.php?foto=<?= urlencode($next); ?>&'+ query;
 							return;
-<?PHP } else { ?>
+<?PHP       } else { ?>
 							alert('Er is geen volgende foto');
-<?PHP } ?>
+<?PHP       } ?>
 						}
 						xmlHttp = false;
 						/*@cc_on @*/
@@ -177,16 +182,16 @@
 						xmlHttp.send(query);
 					}
 
-<?PHP foreach($taggedUsers as $user) { ?>
+<?PHP       foreach($taggedUsers as $user) { ?>
 					addTagField('<?PHP echo $user; ?>');
-<?PHP } ?>
+<?PHP       } ?>
 					addTagField();
 				</script>
 				<input type="button" value="Save" onClick="submitMetaData(false);">
 				<input type="button" value="Save and continue" onClick="submitMetaData(true);">
 			</form>
-<?PHP } elseif($mode == 'index') { ?>
-<?PHP if($visibility) { ?>
+<?PHP       } elseif($mode == 'index') { ?>
+<?PHP       if($visibility) { ?>
 			<fieldset id="settings">
 				<legend>Instellingen</legend>
 				<form>
@@ -253,6 +258,7 @@
 					</table>
 				</form>
 			</fieldset>
-<?PHP } ?>
-<?PHP } ?>
+<?PHP       } ?>
+<?PHP     } ?>
+<?PHP   } ?>
 <?PHP } ?>

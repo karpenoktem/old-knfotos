@@ -111,6 +111,9 @@
 	$mode = 'index';
 	template_assign('mode');
 
+	$type = 'album';
+	template_assign('type');
+
 	template_assign('albums');
 	template_assign('photos');
 	if($album != '') {
@@ -120,6 +123,7 @@
 		}
 		template_assign('parentalbum');
 	}
+	template_assign('album');
 	template_assign('parentalbums');
 	template_assign('title', $humanname);	// XXX
 	template_assign('id');
