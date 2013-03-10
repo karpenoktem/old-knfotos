@@ -21,6 +21,18 @@
 		return $row;
 	}
 
+	function sendDispositionHeader ($disposition, $name) {
+		// see http://stackoverflow.com/questions/93551/how-to-encode-the-filename-parameter-of-content-disposition-header-in-http
+		if ($name)
+			// send real filename instead of php file name
+			// In standards-compilant browsers, this gives the right filename.
+			// In other browsers (IE < 9, Safari), it gives %-escaped characters in the URL (or just zip.php)
+			// So, I don't think this is a real issue (browsers will be updated)
+			header("Content-disposition: $disposition; filename=". urlencode($name) ."; filename*=UTF-8''". urlencode($name));
+		else if ($disposition == 'attachment') // don't send with disposition == 'inline'
+			header("Content-disposition: attachment");
+	}
+
 	/* Send a file to client.
 	   $path is the path of the file, $name is the original name of the file.
 	 */
@@ -36,9 +48,7 @@
 			$mime = 'video/webm';
 		}
 
-		if ($name)
-			// send real filename instead of php file name
-			header('Content-disposition: inline; filename='. $name);
+		sendDispositionHeader('inline', $name);
 		header('Content-type: '. $mime);
 		header('X-Sendfile: '. $path);
 	}

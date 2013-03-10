@@ -123,6 +123,7 @@
 		}
 		template_assign('parentalbum');
 	}
+	template_assign('album');
 	template_assign('parentalbums');
 	template_assign('title', $humanname);	// XXX
 	template_assign('id');

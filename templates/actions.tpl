@@ -20,8 +20,11 @@
 					</form>
 				</table>
 			</fieldset>
+<?php if ($album) { ?>
+			<a href="zip.php?album=<?= htmlentities($album) ?>">Download album als zip</a> | 
+<?php } ?>
 <?PHP if(!isLid()) { ?>
-			<a href="<?= $login_url ?>">Inloggen</a>
+			 <a href="<?= $login_url ?>">Inloggen</a>
 <?PHP } else { ?>
 			<a href="?logout">Uitloggen</a>
 <?PHP   if(isAdmin()) { ?>
