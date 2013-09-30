@@ -10,22 +10,20 @@
 		<![endif]-->
 		<link href="https://www.karpenoktem.nl/base/styles/common/" rel="stylesheet" type="text/css" />
 		<link type="text/css" rel="stylesheet" href="style.css" />
-<?PHP if($sliding) { ?>
 		<script type="text/javascript">
-			function slider_next() {
-				location.href="view.php?slide&foto=<?= urlencode($next) ?>";
-			}
-<?PHP if($foto_slider_preload) { ?>
-			function slider_preload() {
-				var el=document.createElement('img');
-				el.src='foto.php?foto=<?= urlencode($next) ?>';
-				el.style.display='none';
-				el.alt='Fotoslider Preloader';
-				document.body.appendChild(el);
-			}
-<?PHP } ?>
-			setTimeout('slider_next()', <?= $foto_slider_timeout*1000 ?>);
+			var sliding = <?= $sliding ? 'true' : 'false' ?>;
+<?php if ($sliding) { ?>
+			var next    = "view.php?slide&foto=<?= urlencode($next) ?>";
+<?php   if ($foto_slider_preload) { ?>
+			var preload = 'foto.php?foto=<?= urlencode($next) ?>';
+<?php   } ?>
+			var slider_timeout = <?= $foto_slider_timeout ?>;
+<?php } ?>
+			var type    = '<?= $type ?>';
+			var codecs  = <?= json_encode($video_codecs) ?>;
 		</script>
+		<script type="text/javascript" src="script.js"></script>
+<?PHP if($sliding) { ?>
 		<noscript>
 			<meta http-equiv="refresh" content="<?= $foto_slider_timeout ?>; url=view.php?slide&foto=<?= urlencode($next) ?>">
 		</noscript>

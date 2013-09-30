@@ -3,9 +3,10 @@ CREATE TABLE `fa_photos` (
 	`name` varchar(64) NOT NULL,
 	`path` varchar(255) NOT NULL,
 	`visibility` enum('deleted','lost','hidden','leden','world') NOT NULL default 'world',
-	`cached` set('thumb','large','invalidated') NOT NULL,
+	`cached` set('thumb','large','mp4_360p','webm_360p','mp4_720p','webm_720p','invalidated') NOT NULL,
 	`rotation` smallint(6) NOT NULL default '0',
 	`check_tags` tinyint(1) default '0',
+	`type` enum('photo','video') NOT NULL default 'photo',
 	PRIMARY KEY  (`id`),
 	UNIQUE KEY `path` (`path`,`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

@@ -111,6 +111,9 @@
 	$mode = 'index';
 	template_assign('mode');
 
+	$type = 'album';
+	template_assign('type');
+
 	template_assign('albums');
 	template_assign('photos');
 	if($album != '') {
