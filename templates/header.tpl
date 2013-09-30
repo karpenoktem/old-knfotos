@@ -4,11 +4,11 @@
 	<head>
 		<title>ASV Karpe Noktem - KN-Album - <?= htmlentities($title); ?></title>
 		<base href="<?= $absolute_url_path ?>">
-		<link href="http://www.karpenoktem.nl/base/styles/bare/" rel="stylesheet" type="text/css" />
+		<link href="https://www.karpenoktem.nl/base/styles/bare/" rel="stylesheet" type="text/css" />
 		<!--[if lte IE 7]>
-			<link rel="stylesheet" type="text/css" href="http://www.karpenoktem.nl/djmedia/base/iehacks.css" />
+			<link rel="stylesheet" type="text/css" href="https://www.karpenoktem.nl/djmedia/base/iehacks.css" />
 		<![endif]-->
-		<link href="http://www.karpenoktem.nl/base/styles/common/" rel="stylesheet" type="text/css" />
+		<link href="https://www.karpenoktem.nl/base/styles/common/" rel="stylesheet" type="text/css" />
 		<link type="text/css" rel="stylesheet" href="style.css" />
 		<script type="text/javascript">
 			var sliding = <?= $sliding ? 'true' : 'false' ?>;
