@@ -25,4 +25,7 @@
 	$mongo_db = 'users';
 
 	$log_queries = false;
+
+	// set the Google Analytics tracker ID here
+	//$ga_trackerId = '';
 ?>
