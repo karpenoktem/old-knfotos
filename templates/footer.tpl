@@ -13,7 +13,7 @@
 <?php show_template('actions.tpl'); ?>
 			</div>
 			<div id="footer">
-				&copy;2009-2011, Karpe Noktem (<a href="https://github.com/karpenoktem/knfotos">broncode</a>)
+				&copy;2009-2013, Karpe Noktem (<a href="https://github.com/karpenoktem/knfotos">broncode</a>)
 			</div>
 		</div>
 <?php if (isset($ga_trackerId)) { ?>
