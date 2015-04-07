@@ -155,6 +155,12 @@
 			header('Location: https://'. $domain . $_SERVER['REQUEST_URI']);
 			exit;
 		}
+		if(!isset($_SESSION['triedtologin']){
+			$_SESSION['triedtologin'] = true;
+			header('Location: http://www.karpenoktem.nl/accounts/rauth/?url=http://'. $domain . $absolute_url_path . '&nologinrequired=1');
+			exit;
+		}
+		
 		if(isset($_GET['user'], $_GET['token'])) {
 			$params = array('user' => $_GET['user'], 'validate' => $_GET['token'], 'url' => 'https://'. $domain . $absolute_url_path);
 			$ch = curl_init('https://www.karpenoktem.nl/accounts/rauth/?'. http_build_query($params));
